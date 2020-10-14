@@ -1,0 +1,1 @@
+--INSERT INTO CURSO(name,lastName,email,dateBirth, cpf) VALUES('Ana', 'Silva','ana.silva@email.com','10-10-1992', '48718951066');
