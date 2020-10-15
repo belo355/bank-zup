@@ -1,15 +1,26 @@
 package br.com.hackaton.zup.bank.controller.form;
 
 import br.com.hackaton.zup.bank.domain.Proposal;
+import org.hibernate.validator.constraints.br.CPF;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.*;
+import java.util.Date;
 
 public class AccountProposalForm {
 
+    @NotNull @NotBlank @NotEmpty
     private String name;
+
+    @NotNull @NotBlank @NotEmpty
     private String lastName;
+
+    @NotNull @Email
     private String email;
-    private LocalDateTime dateBirth;
+
+    @NotNull @Past
+    private Date dateBirth;
+
+    @NotNull @CPF
     private String cpf;
 
     public AccountProposalForm(){}
@@ -25,39 +36,20 @@ public class AccountProposalForm {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getLastName() {
         return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public LocalDateTime getDateBirth() {
+    public Date getDateBirth() {
         return dateBirth;
-    }
-
-    public void setDateBirth(LocalDateTime dateBirth) {
-        this.dateBirth = dateBirth;
     }
 
     public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
 }

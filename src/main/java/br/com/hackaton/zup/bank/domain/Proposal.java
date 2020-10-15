@@ -4,6 +4,7 @@ import br.com.hackaton.zup.bank.controller.form.AccountProposalForm;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -23,14 +24,14 @@ public class Proposal {
     private String email;
 
     @Column(name = "datebirth")
-    private LocalDateTime dateBirth;
+    private Date dateBirth;
 
     @Column(name="cpf")
     private String cpf;
 
 
     public Proposal() {}
-    public Proposal(String name, String lastName, String email, LocalDateTime dateBirth, String cpf) {
+    public Proposal(String name, String lastName, String email, Date dateBirth, String cpf) {
         this.name = name;
         this.lastName = lastName;
         this.email = email;
@@ -67,11 +68,11 @@ public class Proposal {
     }
 
 
-    public LocalDateTime getDateBirth() {
+    public Date getDateBirth() {
         return dateBirth;
     }
 
-    public void setDateBirth(LocalDateTime dateBirth) {
+    public void setDateBirth(Date dateBirth) {
         this.dateBirth = dateBirth;
     }
 
