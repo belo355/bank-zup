@@ -1,14 +1,25 @@
 package br.com.hackaton.zup.bank.controller.form;
 
+import br.com.hackaton.zup.bank.domain.Proposal;
+
 import java.time.LocalDateTime;
 
-public class AccountForm {
+public class AccountProposalForm {
 
     private String name;
     private String lastName;
     private String email;
     private LocalDateTime dateBirth;
     private String cpf;
+
+    public AccountProposalForm(){}
+    public AccountProposalForm(Proposal proposal) {
+        this.name = proposal.getName();
+        this.lastName = proposal.getLastName();
+        this.email = proposal.getEmail();
+        this.dateBirth = proposal.getDateBirth();
+        this.cpf = proposal.getCpf();
+    }
 
     public String getName() {
         return name;
