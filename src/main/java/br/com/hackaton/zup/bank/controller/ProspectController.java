@@ -1,15 +1,22 @@
 package br.com.hackaton.zup.bank.controller;
 
 
+import br.com.hackaton.zup.bank.controller.form.AccountForm;
 import br.com.hackaton.zup.bank.domain.Prospect;
+import br.com.hackaton.zup.bank.repository.ProspectRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import javax.transaction.Transactional;
 
 @RestController
 @RequestMapping("/abertura-conta")
 public class ProspectController {
+
+    @Autowired
+    private ProspectRepository prospectRepository;
+
 
     @GetMapping(value = "/")
     public String helloProspect(){
@@ -18,13 +25,9 @@ public class ProspectController {
 
 
     @PostMapping
-    public ResponseEntity<Prospect> proposal(@RequestBody(required = false) String name,
-                                            @RequestBody(required = false) String lastName,
-                                            @RequestBody(required = false) String email,
-                                            @RequestBody(required = false) LocalDateTime dateBirth,
-                                            @RequestBody(required = false) String cpf){
-
-        Prospect newProspect = new Prospect(name, lastName, email, dateBirth, cpf);
-        return ResponseEntity.ok().build();
+    @Transactional
+    public ResponseEntity<Prospect> proposal(@RequestBody AccountForm form){
+    prospectRepository.save(new Prospect(form));
+    return ResponseEntity.ok().build();
     }
 }
