@@ -1,6 +1,7 @@
 package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.controller.dto.ProposalAccountDto;
+import br.com.hackaton.zup.bank.service.ProposalService;
 import lombok.extern.slf4j.Slf4j;
 
 import br.com.hackaton.zup.bank.controller.form.AccountProposalForm;
@@ -28,6 +29,9 @@ public class ProposalController {
     @Autowired
     private ProposalRepository proposalRepository;
 
+    @Autowired
+    private ProposalService proposalService;
+
     @GetMapping(value = "/")
     public String helloProspect(){
         return "nice zup";
@@ -51,41 +55,32 @@ public class ProposalController {
     @Transactional
     public ResponseEntity<String>  registerProposal(@RequestBody @Valid AccountProposalForm form, HttpServletRequest req) {
 
-        //TODO: proposalFormValidService
-        try{
-            Proposal proposal = new Proposal(form);
-            proposalRepository.save(proposal);
+        boolean formProposalValid = handleValidProposal(form);
 
-            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/{id}").build()
-                    .expand(proposal.getId()).toUri();
+        if(formProposalValid == true){
+            try{
+                Proposal proposal = new Proposal(form);
+                proposalRepository.save(proposal);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(location);
-            return new ResponseEntity(headers, HttpStatus.CREATED);
-        }catch (Error e){
-            return new ResponseEntity("", HttpStatus.BAD_REQUEST);
+                URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/{id}").build()
+                        .expand(proposal.getId()).toUri();
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setLocation(location);
+                return new ResponseEntity(headers, HttpStatus.CREATED);
+            }catch (Error e){
+                return new ResponseEntity("", HttpStatus.BAD_REQUEST);
+            }
+        }else {
+            return new ResponseEntity("Proposal invalid CPF e/ou Email já Existente", HttpStatus.BAD_REQUEST);
         }
     }
 
-//    //TODO: colocar regra em um service
-//    public Boolean cpfValid(String cpf){
-//        String valid = prospectRepository.find(cpf);
-//
-//        if (valid.isEmpty()) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
+    public boolean handleValidProposal(AccountProposalForm proposalForm){
+        boolean status = proposalService.handle(proposalForm);
+        return status;
+    }
 
-    //TODO: colocar regra em um service
-//    public Boolean emailValid(String email){
-//        String valid = prospectRepository.findByEmail(email);
-//
-//        if (valid.isEmpty()) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
+
+
 }
