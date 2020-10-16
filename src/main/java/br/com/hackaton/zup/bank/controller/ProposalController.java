@@ -35,7 +35,7 @@ public class ProposalController {
     @GetMapping(value = "/")
     public String helloProspect(){
         return "nice zup";
-    }
+    } //TODO: REMOVER
 
     //TODO: documentar
     @GetMapping("/{id}")

@@ -3,7 +3,6 @@ package br.com.hackaton.zup.bank.domain;
 import br.com.hackaton.zup.bank.controller.form.AccountProposalForm;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -72,16 +71,8 @@ public class Proposal {
         return dateBirth;
     }
 
-    public void setDateBirth(Date dateBirth) {
-        this.dateBirth = dateBirth;
-    }
-
     public String getCpf() {
         return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 
     @Override
