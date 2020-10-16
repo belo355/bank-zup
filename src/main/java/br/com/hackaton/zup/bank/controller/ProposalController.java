@@ -1,20 +1,23 @@
 package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.controller.dto.ProposalAccountDto;
-import br.com.hackaton.zup.bank.service.ProposalFormValidService;
 import lombok.extern.slf4j.Slf4j;
 
 import br.com.hackaton.zup.bank.controller.form.AccountProposalForm;
 import br.com.hackaton.zup.bank.domain.Proposal;
 import br.com.hackaton.zup.bank.repository.ProposalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.Optional;
 
 @Slf4j
@@ -25,15 +28,12 @@ public class ProposalController {
     @Autowired
     private ProposalRepository proposalRepository;
 
-    @Autowired
-    private ProposalFormValidService proposalFormValidService;
-
     @GetMapping(value = "/")
     public String helloProspect(){
         return "nice zup";
     }
 
-    //TODO: DOCUMENTAR
+    //TODO: documentar
     @GetMapping("/{id}")
     @Transactional
     public ResponseEntity<ProposalAccountDto> getProposal(@PathVariable(required = true) Long id){
@@ -46,15 +46,22 @@ public class ProposalController {
         return ResponseEntity.notFound().build();
     }
 
-    //TODO: DOCUMENTAR
+    //TODO: documentar
     @PostMapping
     @Transactional
-    public ResponseEntity<String>  registerProposal(@RequestBody @Valid AccountProposalForm form) {
+    public ResponseEntity<String>  registerProposal(@RequestBody @Valid AccountProposalForm form, HttpServletRequest req) {
 
-        //proposalFormValidService TODO: validar cpf e posterior email existente
+        //TODO: proposalFormValidService
         try{
-            proposalRepository.save(new Proposal(form));
-            return new ResponseEntity("", HttpStatus.CREATED);
+            Proposal proposal = new Proposal(form);
+            proposalRepository.save(proposal);
+
+            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/{id}").build()
+                    .expand(proposal.getId()).toUri();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(location);
+            return new ResponseEntity(headers, HttpStatus.CREATED);
         }catch (Error e){
             return new ResponseEntity("", HttpStatus.BAD_REQUEST);
         }
