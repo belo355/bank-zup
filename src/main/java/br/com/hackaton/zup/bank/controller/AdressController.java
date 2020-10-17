@@ -1,6 +1,7 @@
 package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.controller.dto.AdressAccountDto;
+import br.com.hackaton.zup.bank.controller.dto.ProposalAccountDto;
 import br.com.hackaton.zup.bank.controller.form.AdressProposalForm;
 import br.com.hackaton.zup.bank.domain.Adress;
 import br.com.hackaton.zup.bank.repository.AdressRepository;
@@ -20,11 +21,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/abertura-conta/endereco")
 public class AdressController {
-    
+
     @Autowired
     private AdressRepository adressRepository;
 
-    //TODO: documentar
     @GetMapping("/{id}")
     @Transactional
     public ResponseEntity<AdressAccountDto> getAdress(@PathVariable(required = true) Long id){
@@ -37,7 +37,6 @@ public class AdressController {
         return ResponseEntity.notFound().build();
     }
 
-    //TODO: documentar
     @PostMapping
     @Transactional
     public ResponseEntity<String>  registerAdress(@RequestBody @Valid AdressProposalForm form, HttpServletRequest req) {
@@ -45,7 +44,7 @@ public class AdressController {
                 Adress adress = new Adress(form);
                 adressRepository.save(adress);
 
-                URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/{id}").build()
+                URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/endereco/{id}").build()
                         .expand(adress.getId()).toUri();
 
                 HttpHeaders headers = new HttpHeaders();

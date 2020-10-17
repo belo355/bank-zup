@@ -2,7 +2,6 @@ package br.com.hackaton.zup.bank.controller.dto;
 
 import br.com.hackaton.zup.bank.domain.Proposal;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public class ProposalAccountDto {

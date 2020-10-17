@@ -3,8 +3,6 @@ package br.com.hackaton.zup.bank.domain;
 import br.com.hackaton.zup.bank.controller.form.AdressProposalForm;
 
 import javax.persistence.*;
-import javax.validation.Valid;
-import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -15,7 +13,7 @@ public class Adress {
     private Long id;
 
     @Column(name="cep")
-    private int cep;
+    private String cep;
 
     @Column(name="rua")
     private String street;
@@ -33,7 +31,7 @@ public class Adress {
     private String state;
 
     public Adress() {}
-    public Adress(int cep, String street, String region, String complement, String city, String state) {
+    public Adress(String cep, String street, String region, String complement, String city, String state) {
         this.cep = cep;
         this.street = street;
         this.region = region;
@@ -55,7 +53,7 @@ public class Adress {
         return id;
     }
 
-    public int getCep() {
+    public String getCep() {
         return cep;
     }
 

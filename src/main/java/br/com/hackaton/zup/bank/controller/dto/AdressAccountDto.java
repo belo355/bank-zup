@@ -4,24 +4,23 @@ import br.com.hackaton.zup.bank.domain.Adress;
 
 public class AdressAccountDto {
 
-    private int cep;
+    private String cep;
     private String street;
     private String region;
     private String complement;
     private String city;
     private String state;
 
-    public AdressAccountDto(){}
     public AdressAccountDto(Adress adress) {
-        this.cep = getCep();
-        this.street = getStreet();
-        this.region = getRegion();
-        this.complement = getComplement();
-        this.city = getCity();
-        this.state = getState();
+        this.cep = adress.getCep();
+        this.street = adress.getStreet();
+        this.region = adress.getRegion();
+        this.complement = adress.getComplement();
+        this.city = adress.getCity();
+        this.state = adress.getState();
     }
 
-    public int getCep() {
+    public String getCep() {
         return cep;
     }
 

@@ -32,11 +32,6 @@ public class ProposalController {
     @Autowired
     private ProposalService proposalService;
 
-    @GetMapping(value = "/")
-    public String helloProspect(){
-        return "nice zup";
-    } //TODO: REMOVER
-
     //TODO: documentar
     @GetMapping("/{id}")
     @Transactional
