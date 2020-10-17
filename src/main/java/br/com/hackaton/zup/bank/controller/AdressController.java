@@ -9,7 +9,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -38,7 +40,8 @@ public class AdressController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String>  registerAdress(@RequestBody @Valid AdressProposalForm form, HttpServletRequest req) {
+    public ResponseEntity<String>  registerAdress(UriComponentsBuilder uriComponentsBuilder, @RequestBody @Valid AdressProposalForm form, HttpServletRequest req) {
+
             try{
                 Adress adress = new Adress(form);
                 adressRepository.save(adress);

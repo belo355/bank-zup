@@ -1,6 +1,7 @@
 package br.com.hackaton.zup.bank.model;
 
 import br.com.hackaton.zup.bank.controller.form.AccountProposalForm;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -28,6 +29,9 @@ public class Proposal {
 
     @Column(name="cpf")
     private String cpf;
+
+//    @OneToOne
+//    private Adress adress;
 
 
     public Proposal() {}

@@ -1,6 +1,6 @@
 package br.com.hackaton.zup.bank.model;
 
-import org.hibernate.annotations.GenericGenerator;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -9,8 +9,7 @@ import javax.persistence.*;
 public class Image {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @Column(name="name")
@@ -24,6 +23,13 @@ public class Image {
 
     public Image() {
     }
+
+    public Image(MultipartFile file) {
+        this.name = null;
+        this.type = null;
+        this.data = null;
+    }
+
 
     public Image(String name, String type, byte[] data) {
         this.name = name;
@@ -39,24 +45,23 @@ public class Image {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public byte[] getData() {
         return data;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public void setData(byte[] data) {
         this.data = data;
     }
-
 }
