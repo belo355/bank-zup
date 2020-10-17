@@ -1,9 +1,8 @@
 package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.controller.dto.AdressAccountDto;
-import br.com.hackaton.zup.bank.controller.dto.ProposalAccountDto;
 import br.com.hackaton.zup.bank.controller.form.AdressProposalForm;
-import br.com.hackaton.zup.bank.domain.Adress;
+import br.com.hackaton.zup.bank.model.Adress;
 import br.com.hackaton.zup.bank.repository.AdressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

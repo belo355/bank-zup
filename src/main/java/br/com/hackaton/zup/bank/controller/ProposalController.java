@@ -5,7 +5,7 @@ import br.com.hackaton.zup.bank.service.ProposalService;
 import lombok.extern.slf4j.Slf4j;
 
 import br.com.hackaton.zup.bank.controller.form.AccountProposalForm;
-import br.com.hackaton.zup.bank.domain.Proposal;
+import br.com.hackaton.zup.bank.model.Proposal;
 import br.com.hackaton.zup.bank.repository.ProposalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -32,7 +32,6 @@ public class ProposalController {
     @Autowired
     private ProposalService proposalService;
 
-    //TODO: documentar
     @GetMapping("/{id}")
     @Transactional
     public ResponseEntity<ProposalAccountDto> getProposal(@PathVariable(required = true) Long id){
@@ -45,7 +44,6 @@ public class ProposalController {
         return ResponseEntity.notFound().build();
     }
 
-    //TODO: documentar
     @PostMapping
     @Transactional
     public ResponseEntity<String>  registerProposal(@RequestBody @Valid AccountProposalForm form, HttpServletRequest req) {

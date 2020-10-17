@@ -1,6 +1,6 @@
 package br.com.hackaton.zup.bank.controller.form;
 
-import br.com.hackaton.zup.bank.domain.Proposal;
+import br.com.hackaton.zup.bank.model.Proposal;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.*;

@@ -1,6 +1,6 @@
 package br.com.hackaton.zup.bank.controller.dto;
 
-import br.com.hackaton.zup.bank.domain.Proposal;
+import br.com.hackaton.zup.bank.model.Proposal;
 
 import java.util.Date;
 

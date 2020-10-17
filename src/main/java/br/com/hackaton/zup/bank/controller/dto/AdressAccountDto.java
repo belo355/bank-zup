@@ -1,6 +1,6 @@
 package br.com.hackaton.zup.bank.controller.dto;
 
-import br.com.hackaton.zup.bank.domain.Adress;
+import br.com.hackaton.zup.bank.model.Adress;
 
 public class AdressAccountDto {
 

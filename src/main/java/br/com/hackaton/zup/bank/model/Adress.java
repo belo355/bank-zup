@@ -1,10 +1,11 @@
-package br.com.hackaton.zup.bank.domain;
+package br.com.hackaton.zup.bank.model;
 
 import br.com.hackaton.zup.bank.controller.form.AdressProposalForm;
 
 import javax.persistence.*;
 import java.util.Objects;
 
+@Table(name="Adress")
 @Entity
 public class Adress {
 

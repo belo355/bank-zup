@@ -1,6 +1,6 @@
 package br.com.hackaton.zup.bank.controller.form;
 
-import br.com.hackaton.zup.bank.domain.Adress;
+import br.com.hackaton.zup.bank.model.Adress;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
