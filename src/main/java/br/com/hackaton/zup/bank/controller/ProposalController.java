@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import br.com.hackaton.zup.bank.controller.form.AccountProposalForm;
 import br.com.hackaton.zup.bank.model.Proposal;
 import br.com.hackaton.zup.bank.repository.ProposalRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,14 +34,16 @@ public class ProposalController {
     @Autowired
     private ProposalService proposalService;
 
+    Logger logger = LoggerFactory.getLogger(ProposalController.class);
+
     @GetMapping("/{id}")
     @Transactional
     public ResponseEntity<ProposalAccountDto> getProposal(@PathVariable(required = true) Long id){
         try {
             Optional<Proposal> proposal =  proposalRepository.findById(id);
             return ResponseEntity.ok(new ProposalAccountDto(proposal.get()));
-        }catch (Error e){
-            //TODO: LLOGGER ERROR
+        }catch (Exception e){
+            logger.info("Prosposta não encontrada" + e.getMessage());
         }
         return ResponseEntity.notFound().build();
     }
@@ -60,9 +64,10 @@ public class ProposalController {
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.setLocation(location);
+                logger.info("Header location - " + headers);
                 return new ResponseEntity(headers, HttpStatus.CREATED);
-            }catch (Error e){
-                return new ResponseEntity("", HttpStatus.BAD_REQUEST);
+            }catch (Exception e){
+                return new ResponseEntity("Erro ao registrar a proposta", HttpStatus.BAD_REQUEST);
             }
         }else {
             return new ResponseEntity("Proposal invalid CPF e/ou Email já Existente", HttpStatus.BAD_REQUEST);
@@ -73,7 +78,5 @@ public class ProposalController {
         boolean status = proposalService.handle(proposalForm);
         return status;
     }
-
-
 
 }

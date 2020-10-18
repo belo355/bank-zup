@@ -4,6 +4,8 @@ import br.com.hackaton.zup.bank.config.files.ResponseImageHandler;
 import br.com.hackaton.zup.bank.config.files.ResponseMessageHandler;
 import br.com.hackaton.zup.bank.model.Image;
 import br.com.hackaton.zup.bank.service.ImageStorageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,7 +16,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,23 +25,25 @@ public class ImageController {
     @Autowired
     private ImageStorageService storageService;
 
+    Logger logger = LoggerFactory.getLogger(ImageController.class);
+
     @PostMapping
     public ResponseEntity<ResponseMessageHandler> uploadFile(@RequestParam(value = "file", required = true) MultipartFile file) {
         String message = "";
         try {
-            storageService.store(file);
+            Image image = storageService.store(file);
 
             URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/upload/{id}").build()
-                    .expand(storageService.store(file).getId()).toUri();
+                    .expand(image.getId()).toUri();
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(location);
+            logger.info("Uploado realizado com sucesso ");
+            logger.info("Header location - " + headers);
             return new ResponseEntity(headers, HttpStatus.CREATED);
-//            message = "Uploaded the file successfully: " + file.getOriginalFilename();
-//            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessageHandler(message));
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessageHandler(message));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessageHandler(message));
         }
     }
 

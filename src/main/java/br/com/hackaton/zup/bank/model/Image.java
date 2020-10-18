@@ -3,6 +3,8 @@ package br.com.hackaton.zup.bank.model;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Table(name="Image")
 @Entity
@@ -18,7 +20,7 @@ public class Image {
     @Column(name="type")
     private String type;
 
-    @Lob
+    @Lob @NotNull @NotEmpty
     private byte[] data;
 
     public Image() {
