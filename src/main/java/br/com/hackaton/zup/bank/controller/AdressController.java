@@ -52,27 +52,37 @@ public class AdressController {
             Adress adress = new Adress(form);
             adressRepository.save(adress);
 
-            logger.info("Capturar proposal relacionada ");
-            Proposal proposal = proposalRepository.getOne(Long.parseLong(headerLocation.substring(headerLocation.length() - 1)));
+            logger.info("Find proposal to x-com-location .. " + headerLocation);
+            Proposal proposal = getPorposalExist(returnLong(headerLocation));
 
-            if(proposal.getId() != null){
-                adress.setProposal(proposal);
-            }else{
-                return new ResponseEntity("param x-com-location not found ", HttpStatus.BAD_REQUEST);
-            }
+//            adress.setProposal(proposal);
+              proposal.setAdress(adress);
+              logger.info("Adress : " + adress.getStreet() + "associado a proposal: "  + proposal.getId());
 
-            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/endereco/{id}").build()
-                    .expand(adress.getId()).toUri();
+            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/endereco/{id}")
+                    .build().expand(adress.getId()).toUri();
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(location);
 
-            logger.info("Header location - " + headers);
             return new ResponseEntity(headers, HttpStatus.CREATED);
         } catch (Exception e) {
             logger.info("Não foi possivel registrar o endereço " + e.getMessage());
             return new ResponseEntity("", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public Proposal getPorposalExist(Long id){
+        try{
+            return proposalRepository.getOne(id);
+        }catch (Exception e ){
+            logger.info(e.getMessage());
+        }
+        return null;
+    }
+
+    public Long returnLong(String headerLocation){
+        return Long.parseLong(headerLocation.substring(headerLocation.length() - 1));
     }
 
 }

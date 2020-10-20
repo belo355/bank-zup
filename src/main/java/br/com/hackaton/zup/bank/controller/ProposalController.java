@@ -1,6 +1,9 @@
 package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.controller.dto.ProposalAccountDto;
+import br.com.hackaton.zup.bank.controller.dto.ProposalAccountInformationDto;
+import br.com.hackaton.zup.bank.model.Adress;
+import br.com.hackaton.zup.bank.repository.AdressRepository;
 import br.com.hackaton.zup.bank.service.ProposalService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,6 +37,9 @@ public class ProposalController {
     @Autowired
     private ProposalService proposalService;
 
+    @Autowired
+    private AdressRepository adressRepository;
+
     Logger logger = LoggerFactory.getLogger(ProposalController.class);
 
     @GetMapping("/{id}")
@@ -47,6 +53,21 @@ public class ProposalController {
         }
         return ResponseEntity.notFound().build();
     }
+
+//    @GetMapping("/{id}/resume")
+//    @Transactional
+//    public ResponseEntity<ProposalAccountInformationDto> getProposalInformation(@PathVariable(required = true) Long id){
+//        try {
+//            Optional<Proposal> proposal =  proposalRepository.findById(id);
+//            Optional<Adress> adress =  adressRepository.findByIdProposal_Id(id.intValue());
+//
+//            return ResponseEntity.ok(new ProposalAccountInformationDto(proposal.get(), adress.get()));
+//        }catch (Exception e){
+//            logger.info("Prosposta não encontrada" + e.getMessage());
+//        }
+//        return ResponseEntity.notFound().build();
+//    }
+
 
     @PostMapping
     @Transactional

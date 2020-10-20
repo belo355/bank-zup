@@ -31,8 +31,8 @@ public class Adress {
     @Column(name="estado")
     private String state;
 
-    @OneToOne
-    private Proposal proposal;
+//    @OneToOne
+//    private Proposal proposal;
 
 
     public Adress() {}
@@ -82,11 +82,4 @@ public class Adress {
         return state;
     }
 
-    public Proposal getProposal() {
-        return proposal;
-    }
-
-    public void setProposal(Proposal proposal) {
-        this.proposal = proposal;
-    }
 }
