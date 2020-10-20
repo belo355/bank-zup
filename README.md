@@ -23,17 +23,17 @@ Projeto desenvolvido durante Bootcamp ZUP 2020, tem como objetivo a criação de
 ```
 /swagger-ui.html
 
-# endpoint Proposal
+/endpoint Proposal
 
 <img src="https://github.com/belo355/bank-zup/blob/master/proposal-controller.PNG"/>
 
 
-# endpoint Adress
+/endpoint Adress
 
 <img src="https://github.com/belo355/bank-zup/blob/master/adress-controller.PNG"/>
 
 
-# endpoint Image
+/endpoint Image
 
 <img src="https://github.com/belo355/bank-zup/blob/master/image-controller.PNG"/>
 
