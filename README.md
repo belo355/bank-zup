@@ -1,13 +1,7 @@
 
-
 <h4 align="center">
   🚀 Bootcamp ZUP 
 </h4>
-
-<p align="center">
-  <a href="#rocket-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-projeto">Projeto</a>&nbsp;&nbsp;&nbsp;
-</p>
 
 <br>
 
