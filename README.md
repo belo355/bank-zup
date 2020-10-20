@@ -6,8 +6,9 @@
 <br>
 
 ## :rocket: Tecnologias
-
+```
 Esse projeto foi desenvolvido com as seguintes tecnologias:
+```
 
 - [Java]()
 - [Spring Boot](https://spring.io/)
@@ -30,12 +31,12 @@ Projeto desenvolvido durante Bootcamp ZUP 2020, tem como objetivo a criação de
 
 # endpoint Adress
 
-<img src="https://github.com/belo355/bank-zup/blob/master/Adress-controller.PNG"/>
+<img src="https://github.com/belo355/bank-zup/blob/master/adress-controller.PNG"/>
 
 
 # endpoint Image
 
-<img src="https://github.com/belo355/bank-zup/blob/master/Image-controller.PNG"/>
+<img src="https://github.com/belo355/bank-zup/blob/master/image-controller.PNG"/>
 
 
 
