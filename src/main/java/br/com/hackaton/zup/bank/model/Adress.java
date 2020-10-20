@@ -3,7 +3,7 @@ package br.com.hackaton.zup.bank.model;
 import br.com.hackaton.zup.bank.controller.form.AdressProposalForm;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.Optional;
 
 @Table(name="Adress")
 @Entity
@@ -30,6 +30,10 @@ public class Adress {
 
     @Column(name="estado")
     private String state;
+
+    @OneToOne
+    private Proposal proposal;
+
 
     public Adress() {}
     public Adress(String cep, String street, String region, String complement, String city, String state) {
@@ -78,22 +82,11 @@ public class Adress {
         return state;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Adress adress = (Adress) o;
-        return cep == adress.cep &&
-                Objects.equals(id, adress.id) &&
-                Objects.equals(street, adress.street) &&
-                Objects.equals(region, adress.region) &&
-                Objects.equals(complement, adress.complement) &&
-                Objects.equals(city, adress.city) &&
-                Objects.equals(state, adress.state);
+    public Proposal getProposal() {
+        return proposal;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, cep, street, region, complement, city, state);
+    public void setProposal(Proposal proposal) {
+        this.proposal = proposal;
     }
 }

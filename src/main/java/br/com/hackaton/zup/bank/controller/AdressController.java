@@ -52,10 +52,14 @@ public class AdressController {
             Adress adress = new Adress(form);
             adressRepository.save(adress);
 
-            Optional<Proposal> proposal = proposalRepository.findById(Long.parseLong(headerLocation.substring(headerLocation.length() - 1)));
-            proposal.ifPresent(prop -> {
-                prop.setAdress(adress.getId()); //TODO: RESOLVER ATRIBUICAO DO ID
-            });
+            logger.info("Capturar proposal relacionada ");
+            Proposal proposal = proposalRepository.getOne(Long.parseLong(headerLocation.substring(headerLocation.length() - 1)));
+
+            if(proposal.getId() != null){
+                adress.setProposal(proposal);
+            }else{
+                return new ResponseEntity("param x-com-location not found ", HttpStatus.BAD_REQUEST);
+            }
 
             URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/endereco/{id}").build()
                     .expand(adress.getId()).toUri();

@@ -29,8 +29,8 @@ public class Proposal {
     @Column(name="cpf")
     private String cpf;
 
-    @OneToOne
-    private Adress adress;
+//    @OneToOne
+//    private Adress adress;
 
     public Proposal() {}
     public Proposal(String name, String lastName, String email, Date dateBirth, String cpf) {
@@ -78,9 +78,6 @@ public class Proposal {
         return cpf;
     }
 
-    public void setAdress(Long adressId) {
-        this.adress = adress;
-    }
 
     @Override
     public boolean equals(Object o) {

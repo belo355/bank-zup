@@ -32,7 +32,6 @@ public class Image {
         this.data = null;
     }
 
-
     public Image(String name, String type, byte[] data) {
         this.name = name;
         this.type = type;

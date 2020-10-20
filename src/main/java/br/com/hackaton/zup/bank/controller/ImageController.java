@@ -38,7 +38,7 @@ public class ImageController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(location);
-            logger.info("Uploado realizado com sucesso ");
+            logger.info("Upload realizado com sucesso ");
             logger.info("Header location - " + headers);
             return new ResponseEntity(headers, HttpStatus.CREATED);
         } catch (Exception e) {
