@@ -39,7 +39,7 @@ public class AdressController {
             Optional<Adress> adress = adressRepository.findById(id);
             return ResponseEntity.ok(new AdressAccountDto(adress.get()));
         } catch (Exception e) {
-            logger.info("Endereço nao encontrado " + e.getMessage());
+            logger.info("Adress not found" + e.getMessage());
         }
         return ResponseEntity.notFound().build();
     }
@@ -51,13 +51,13 @@ public class AdressController {
         try {
             Adress adress = new Adress(form);
             adressRepository.save(adress);
+            logger.info("Adress registed sucessfull: " + adress.getId());
 
             logger.info("Find proposal to x-com-location .. " + headerLocation);
             Proposal proposal = getPorposalExist(returnLong(headerLocation));
 
-//            adress.setProposal(proposal);
-              proposal.setAdress(adress);
-              logger.info("Adress : " + adress.getStreet() + "associado a proposal: "  + proposal.getId());
+            proposal.setAdress(adress);
+            logger.info("Adress : [" + adress.getStreet() + "] associeted for proposal: "  + proposal.getId());
 
             URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/endereco/{id}")
                     .build().expand(adress.getId()).toUri();
@@ -67,7 +67,7 @@ public class AdressController {
 
             return new ResponseEntity(headers, HttpStatus.CREATED);
         } catch (Exception e) {
-            logger.info("Não foi possivel registrar o endereço " + e.getMessage());
+            logger.info("Not possible register adress information  " + e.getMessage());
             return new ResponseEntity("", HttpStatus.BAD_REQUEST);
         }
     }

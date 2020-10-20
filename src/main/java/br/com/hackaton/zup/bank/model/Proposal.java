@@ -32,6 +32,9 @@ public class Proposal {
     @OneToOne
     private Adress adress;
 
+    @OneToOne
+    private Image image;
+
     public Proposal() {}
     public Proposal(String name, String lastName, String email, Date dateBirth, String cpf) {
         this.name = name;
@@ -82,6 +85,14 @@ public class Proposal {
         return adress;
     }
 
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
     public void setAdress(Adress adress) {
         this.adress = adress;
     }
@@ -90,17 +101,19 @@ public class Proposal {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Proposal prospect = (Proposal) o;
-        return Objects.equals(id, prospect.id) &&
-                Objects.equals(name, prospect.name) &&
-                Objects.equals(lastName, prospect.lastName) &&
-                Objects.equals(email, prospect.email) &&
-                Objects.equals(dateBirth, prospect.dateBirth) &&
-                Objects.equals(cpf, prospect.cpf);
+        Proposal proposal = (Proposal) o;
+        return Objects.equals(id, proposal.id) &&
+                Objects.equals(name, proposal.name) &&
+                Objects.equals(lastName, proposal.lastName) &&
+                Objects.equals(email, proposal.email) &&
+                Objects.equals(dateBirth, proposal.dateBirth) &&
+                Objects.equals(cpf, proposal.cpf) &&
+                Objects.equals(adress, proposal.adress) &&
+                Objects.equals(image, proposal.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, lastName, email, dateBirth, cpf);
+        return Objects.hash(id, name, lastName, email, dateBirth, cpf, adress, image);
     }
 }

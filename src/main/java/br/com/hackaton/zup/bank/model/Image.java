@@ -12,7 +12,7 @@ public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     @Column(name="name")
     private String name;
@@ -38,10 +38,9 @@ public class Image {
         this.data = data;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
-
     public  String getName() {
         return name;
     }

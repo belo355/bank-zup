@@ -58,11 +58,11 @@ public class ProposalController {
     @Transactional
     public ResponseEntity<ProposalAccountInformationDto> getProposalInformation(@PathVariable(required = true) Long id){
         try {
+            logger.info("Find proposal information resume .. " + id);
             Optional<Proposal> proposal =  proposalRepository.findById(id);
-
             return ResponseEntity.ok(new ProposalAccountInformationDto(proposal.get()));
         }catch (Exception e){
-            logger.info("Prosposta não encontrada" + e.getMessage());
+            logger.info("Proposal not found" + e.getMessage());
         }
         return ResponseEntity.notFound().build();
     }
@@ -77,19 +77,20 @@ public class ProposalController {
             try{
                 Proposal proposal = new Proposal(form);
                 proposalRepository.save(proposal);
+                logger.info("Proposal registed sucessfull: " + proposal.getId());
 
                 URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/{id}").build()
                         .expand(proposal.getId()).toUri();
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.setLocation(location);
-                logger.info("Header location - " + headers);
+                logger.info(("generate location: "+ headers));
                 return new ResponseEntity(headers, HttpStatus.CREATED);
             }catch (Exception e){
-                return new ResponseEntity("Erro ao registrar a proposta", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity("Erro register proposal", HttpStatus.BAD_REQUEST);
             }
         }else {
-            return new ResponseEntity("Proposal invalid CPF e/ou Email já Existente", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Proposal invalid CPF or email exists", HttpStatus.BAD_REQUEST);
         }
     }
 
