@@ -13,29 +13,23 @@ public class ProposalAccountInformationDto {
     private Date dateBirth;
     private String cpf;
 
-    private String cep;
-    private String street;
-    private String region;
-    private String complement;
-    private String city;
-    private String state;
+    private Adress adress;
 
-    public ProposalAccountInformationDto(Proposal proposal, Adress adress) {
+    public ProposalAccountInformationDto(Proposal proposal) {
         this.name = proposal.getName();
         this.lastName = proposal.getLastName();
         this.email = proposal.getEmail();
         this.dateBirth = proposal.getDateBirth();
         this.cpf = proposal.getCpf();
-        this.cep = adress.getCep();
-        this.street = adress.getStreet();
-        this.region = adress.getRegion();
-        this.complement = adress.getRegion();
-        this.city = adress.getCity();
-        this.state = adress.getState();
+        this.adress = proposal.getAdress();
     }
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLastName() {
@@ -46,59 +40,19 @@ public class ProposalAccountInformationDto {
         return email;
     }
 
+
     public Date getDateBirth() {
         return dateBirth;
     }
+
 
     public String getCpf() {
         return cpf;
     }
 
-    public String getCep() {
-        return cep;
+
+    public Adress getAdress() {
+        return adress;
     }
 
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public String getComplement() {
-        return complement;
-    }
-
-    public void setComplement(String complement) {
-        this.complement = complement;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
 }

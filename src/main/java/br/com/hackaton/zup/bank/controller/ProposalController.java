@@ -54,20 +54,18 @@ public class ProposalController {
         return ResponseEntity.notFound().build();
     }
 
-//    @GetMapping("/{id}/resume")
-//    @Transactional
-//    public ResponseEntity<ProposalAccountInformationDto> getProposalInformation(@PathVariable(required = true) Long id){
-//        try {
-//            Optional<Proposal> proposal =  proposalRepository.findById(id);
-//            Optional<Adress> adress =  adressRepository.findByIdProposal_Id(id.intValue());
-//
-//            return ResponseEntity.ok(new ProposalAccountInformationDto(proposal.get(), adress.get()));
-//        }catch (Exception e){
-//            logger.info("Prosposta não encontrada" + e.getMessage());
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
+    @GetMapping("/{id}/resume")
+    @Transactional
+    public ResponseEntity<ProposalAccountInformationDto> getProposalInformation(@PathVariable(required = true) Long id){
+        try {
+            Optional<Proposal> proposal =  proposalRepository.findById(id);
 
+            return ResponseEntity.ok(new ProposalAccountInformationDto(proposal.get()));
+        }catch (Exception e){
+            logger.info("Prosposta não encontrada" + e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
 
     @PostMapping
     @Transactional
