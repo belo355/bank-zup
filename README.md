@@ -12,10 +12,33 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - [Java]()
 - [Spring Boot](https://spring.io/)
 
+```
+# 💻 Projeto
+```
 
-## 💻 Projeto
+Projeto desenvolvido durante Bootcamp ZUP 2020, tem como objetivo a criação de aplicação backend para atendimento de cliente em fluxo de um banco online;   
 
-Projeto desenvolvido durante Bootcamp ZUP 2020  
-
-## 🔖 Documentação
+```
+# 🔖 Documentação
+```
 /swagger-ui.html
+
+/endpoint Proposal
+
+<img src="https://github.com/belo355/bank-zup/blob/master/proposal-controller.PNG"/>
+
+
+/endpoint Adress
+
+<img src="https://github.com/belo355/bank-zup/blob/master/adress-controller.PNG"/>
+
+
+/endpoint Image
+
+<img src="https://github.com/belo355/bank-zup/blob/master/image-controller.PNG"/>
+
+
+
+
+
+
