@@ -40,7 +40,7 @@ public class ImageController {
             Image image = storageService.store(file);
             logger.info("Image Upload sucessfull: " + image.getId());
 
-            logger.info("Find proposal to x-com-location .. " + headerLocation);
+            logger.info("Find proposal: " + headerLocation);
             Proposal proposal = getPorposalExist(returnLong(headerLocation));
 
             proposal.setImage(image);

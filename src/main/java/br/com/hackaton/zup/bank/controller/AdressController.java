@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
@@ -47,13 +48,15 @@ public class AdressController {
     @PostMapping
     @Transactional
     public ResponseEntity<String> registerAdress(@RequestBody @Valid AdressProposalForm form,
-                                                 @RequestHeader(name = "x-com-location", required = true) String headerLocation) {
+                                                 @RequestHeader(name = "x-com-location", required = true) String headerLocation) throws StringIndexOutOfBoundsException {
         try {
+            Optional.ofNullable(form).orElseThrow(() -> new EntityNotFoundException("Not possible register adress information")); //TODO: entender melhor esta forma de aplicar exceptions
+
             Adress adress = new Adress(form);
             adressRepository.save(adress);
             logger.info("Adress registed sucessfull: " + adress.getId());
 
-            logger.info("Find proposal to x-com-location .. " + headerLocation);
+            Optional.ofNullable(headerLocation).orElseThrow(() -> new StringIndexOutOfBoundsException("Not found param headerLocation")); //TODO: entender melhor como tratar exception
             Proposal proposal = getPorposalExist(returnLong(headerLocation));
 
             proposal.setAdress(adress);
@@ -66,20 +69,11 @@ public class AdressController {
             headers.setLocation(location);
 
             return new ResponseEntity(headers, HttpStatus.CREATED);
-        } catch (Exception e) {
+        } catch (EntityNotFoundException e) {
             logger.info("Not possible register adress information  " + e.getMessage());
             return new ResponseEntity("", HttpStatus.BAD_REQUEST);
         }
     }
-
-//    public ResponseEntity<String> getPorposalExist(Long id){
-//        try{
-//            return proposalRepository.getOne(id);
-//        }catch (Exception e ){
-//            logger.info(e.getMessage());
-//        }
-//        return null;
-//    }
 
     public Proposal getPorposalExist(Long id){
         try{

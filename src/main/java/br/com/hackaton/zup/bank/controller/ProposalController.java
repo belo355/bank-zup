@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -49,7 +50,7 @@ public class ProposalController {
             Optional<Proposal> proposal =  proposalRepository.findById(id);
             return ResponseEntity.ok(new ProposalAccountDto(proposal.get()));
         }catch (Exception e){
-            logger.info("Prosposta não encontrada" + e.getMessage());
+            logger.info("Proposal not found: " + e.getMessage());
         }
         return ResponseEntity.notFound().build();
     }
@@ -76,10 +77,11 @@ public class ProposalController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String>  registerProposal(@RequestBody @Valid AccountProposalForm form, HttpServletRequest req) {
+    public ResponseEntity<String>  registerProposal(@RequestBody @Valid AccountProposalForm form, HttpServletRequest req) throws Exception {
+
+        Optional.ofNullable(form).orElseThrow(() -> new Exception("Not possible register Proposal information")); //TODO: entender melhor esta forma de aplicar exceptions
 
         boolean formProposalValid = handleValidProposal(form);
-
         if(formProposalValid == true){
             try{
                 Proposal proposal = new Proposal(form);
