@@ -3,6 +3,7 @@ package br.com.hackaton.zup.bank.controller.dto;
 import br.com.hackaton.zup.bank.model.Proposal;
 
 import java.util.Date;
+import java.util.List;
 
 public class ProposalAccountDto {
 
@@ -11,6 +12,17 @@ public class ProposalAccountDto {
     private String email;
     private Date dateBirth;
     private String cpf;
+
+
+    public ProposalAccountDto(List<Proposal> proposals){
+       proposals.forEach(p -> {
+           this.name = p.getName();
+           this.lastName = p.getLastName();
+           this.email = p.getEmail();
+           this.dateBirth = p.getDateBirth();
+           this.cpf = p.getCpf();
+       });
+    };
 
     public ProposalAccountDto(Proposal proposal) {
         this.name = proposal.getName();

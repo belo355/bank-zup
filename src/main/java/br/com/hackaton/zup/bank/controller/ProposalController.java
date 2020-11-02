@@ -2,7 +2,6 @@ package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.controller.dto.ProposalAccountDto;
 import br.com.hackaton.zup.bank.controller.dto.ProposalAccountInformationDto;
-import br.com.hackaton.zup.bank.model.Adress;
 import br.com.hackaton.zup.bank.repository.AdressRepository;
 import br.com.hackaton.zup.bank.service.ProposalService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -42,6 +41,13 @@ public class ProposalController {
 
     Logger logger = LoggerFactory.getLogger(ProposalController.class);
 
+
+    //using for ping while programmn is live
+    //    @GetMapping("/")
+    //    public String hello(){
+    //        return "hello";
+    //    }
+
     @GetMapping("/{id}")
     @Transactional
     public ResponseEntity<ProposalAccountDto> getProposal(@PathVariable(required = true) Long id){
@@ -52,6 +58,13 @@ public class ProposalController {
             logger.info("Prosposta não encontrada" + e.getMessage());
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/")
+    @Transactional
+    public  ResponseEntity<List<Proposal>> getAllProposal(){
+        List<Proposal> proposals = proposalRepository.findAll();
+        return ResponseEntity.ok(proposals);
     }
 
     @GetMapping("/{id}/resume")

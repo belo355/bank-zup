@@ -44,45 +44,54 @@ public class AdressController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
-    @Transactional
-    public ResponseEntity<String> registerAdress(@RequestBody @Valid AdressProposalForm form,
-                                                 @RequestHeader(name = "x-com-location", required = true) String headerLocation) {
-        try {
-            Adress adress = new Adress(form);
-            adressRepository.save(adress);
-            logger.info("Adress registed sucessfull: " + adress.getId());
+//    @PostMapping
+//    @Transactional
+//    public ResponseEntity<String> registerAdress(@RequestBody @Valid AdressProposalForm form,
+//                                                 @RequestHeader(name = "x-com-location", required = true) String headerLocation) {
+//        try {
+//            Adress adress = new Adress(form);
+//            adressRepository.save(adress);
+//            logger.info("Adress registed sucessfull: " + adress.getId());
+//
+//            logger.info("Find proposal to x-com-location .. " + headerLocation);
+//            Proposal proposal = findHeaderLocation(headerLocation); //TODO: CONTINUAR DAQUI
+//
+//            proposal.setAdress(adress);
+//            logger.info("Adress : [" + adress.getStreet() + "] associeted for proposal: "  + proposal.getId());
+//
+//            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/endereco/{id}")
+//                    .build().expand(adress.getId()).toUri();
+//
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setLocation(location);
+//
+//            return new ResponseEntity(headers, HttpStatus.CREATED);
+//        } catch (Exception e) {
+//            logger.info("Not possible register adress information  " + e.getMessage());
+//            return new ResponseEntity("", HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
-            logger.info("Find proposal to x-com-location .. " + headerLocation);
-            Proposal proposal = getPorposalExist(returnLong(headerLocation));
+//    public ResponseEntity<String> getPorposalExist(Long id){
+//        try{
+//            return proposalRepository.getOne(id);
+//        }catch (Exception e ){
+//            logger.info(e.getMessage());
+//        }
+//        return null;
+//    }
 
-            proposal.setAdress(adress);
-            logger.info("Adress : [" + adress.getStreet() + "] associeted for proposal: "  + proposal.getId());
-
-            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/endereco/{id}")
-                    .build().expand(adress.getId()).toUri();
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(location);
-
-            return new ResponseEntity(headers, HttpStatus.CREATED);
-        } catch (Exception e) {
-            logger.info("Not possible register adress information  " + e.getMessage());
-            return new ResponseEntity("", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    public Proposal getPorposalExist(Long id){
-        try{
-            return proposalRepository.getOne(id);
-        }catch (Exception e ){
-            logger.info(e.getMessage());
-        }
-        return null;
-    }
+//    public ResponseEntity<String> findHeaderLocation(String headerLocation){
+//        try{
+//            Optional<Proposal> p =  proposalRepository.findById(returnLong(headerLocation));
+//        }catch(NullPointerException e){
+//            logger.info(e.getMessage());
+//            return new ResponseEntity("", HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     public Long returnLong(String headerLocation){
-        return Long.parseLong(headerLocation.substring(headerLocation.length() - 1));
+        return Long.parseLong(headerLocation.substring(headerLocation.length() - 1)); //TODO: MELHORAR PARA PEGAR INFORMACOES APOS A BARRA ( EXEMPLO ID 10 )
     }
 
 }
