@@ -42,12 +42,6 @@ public class ProposalController {
     Logger logger = LoggerFactory.getLogger(ProposalController.class);
 
 
-    //using for ping while programmn is live
-    //    @GetMapping("/")
-    //    public String hello(){
-    //        return "hello";
-    //    }
-
     @GetMapping("/{id}")
     @Transactional
     public ResponseEntity<ProposalAccountDto> getProposal(@PathVariable(required = true) Long id){
