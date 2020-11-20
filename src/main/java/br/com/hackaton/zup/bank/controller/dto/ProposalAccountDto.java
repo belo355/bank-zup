@@ -2,7 +2,8 @@ package br.com.hackaton.zup.bank.controller.dto;
 
 import br.com.hackaton.zup.bank.model.Proposal;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class ProposalAccountDto {
@@ -10,7 +11,7 @@ public class ProposalAccountDto {
     private String name;
     private String lastName;
     private String email;
-    private Date dateBirth;
+    private LocalDate dateBirth;
     private String cpf;
 
 
@@ -44,7 +45,7 @@ public class ProposalAccountDto {
         return email;
     }
 
-    public Date getDateBirth() {
+    public LocalDate getDateBirth() {
         return dateBirth;
     }
 

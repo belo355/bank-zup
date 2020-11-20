@@ -1,9 +1,11 @@
 package br.com.hackaton.zup.bank.model;
 
 import br.com.hackaton.zup.bank.controller.form.AccountProposalForm;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Table(name="Proposal")
@@ -24,7 +26,8 @@ public class Proposal {
     private String email;
 
     @Column(name = "datebirth")
-    private Date dateBirth;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dateBirth;
 
     @Column(name="cpf")
     private String cpf;
@@ -36,7 +39,7 @@ public class Proposal {
     private Image image;
 
     public Proposal() {}
-    public Proposal(String name, String lastName, String email, Date dateBirth, String cpf) {
+    public Proposal(String name, String lastName, String email, LocalDate dateBirth, String cpf) {
         this.name = name;
         this.lastName = lastName;
         this.email = email;
@@ -73,7 +76,7 @@ public class Proposal {
     }
 
 
-    public Date getDateBirth() {
+    public LocalDate getDateBirth() {
         return dateBirth;
     }
 

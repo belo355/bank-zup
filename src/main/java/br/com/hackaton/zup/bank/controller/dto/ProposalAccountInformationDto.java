@@ -4,14 +4,15 @@ import br.com.hackaton.zup.bank.model.Adress;
 import br.com.hackaton.zup.bank.model.Image;
 import br.com.hackaton.zup.bank.model.Proposal;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class ProposalAccountInformationDto {
 
     private String name;
     private String lastName;
     private String email;
-    private Date dateBirth;
+    private LocalDate dateBirth;
     private String cpf;
 
     private Adress adress;
@@ -45,7 +46,7 @@ public class ProposalAccountInformationDto {
     }
 
 
-    public Date getDateBirth() {
+    public LocalDate getDateBirth() {
         return dateBirth;
     }
 

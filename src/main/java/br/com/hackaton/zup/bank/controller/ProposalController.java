@@ -18,11 +18,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +43,6 @@ public class ProposalController {
     private AdressRepository adressRepository;
 
     Logger logger = LoggerFactory.getLogger(ProposalController.class);
-
 
     @GetMapping("/{id}")
     @Transactional
@@ -79,10 +80,12 @@ public class ProposalController {
     @Transactional
     public ResponseEntity<String>  registerProposal(@RequestBody @Valid AccountProposalForm form, HttpServletRequest req) throws Exception {
 
-        Optional.ofNullable(form).orElseThrow(() -> new Exception("Not possible register Proposal information")); //TODO: entender melhor esta forma de aplicar exceptions
+        Optional.ofNullable(form).orElseThrow(() -> new Exception("Not possible register Proposal information")); //TODO: entender melhor, esta forma de aplicar exceptions
 
         boolean formProposalValid = handleValidProposal(form);
-        if(formProposalValid == true){
+        boolean ageRange = handleDateBirth(form.getDateBirth());
+
+        if(formProposalValid == true && ageRange == true){ //TODO: AJUSTAR EXCEPPTION PARA DATA DE NASCIMENTO
             try{
                 Proposal proposal = new Proposal(form);
                 proposalRepository.save(proposal);
@@ -106,6 +109,18 @@ public class ProposalController {
     public boolean handleValidProposal(AccountProposalForm proposalForm){
         boolean status = proposalService.handle(proposalForm);
         return status;
+    }
+
+    public boolean handleDateBirth(LocalDate birth){
+        int ageYearBirth = birth.getYear();
+        int yearActual = LocalDate.now().getYear();
+
+        int ageFinal = yearActual - ageYearBirth;
+        if(ageFinal >= 18){ //TODO: colocar param em variavel static
+            return true;
+        }else {
+            return false;
+        }
     }
 
 }

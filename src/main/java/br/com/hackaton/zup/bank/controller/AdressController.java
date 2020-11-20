@@ -50,13 +50,13 @@ public class AdressController {
     public ResponseEntity<String> registerAdress(@RequestBody @Valid AdressProposalForm form,
                                                  @RequestHeader(name = "x-com-location", required = true) String headerLocation) throws StringIndexOutOfBoundsException {
         try {
-            Optional.ofNullable(form).orElseThrow(() -> new EntityNotFoundException("Not possible register adress information")); //TODO: entender melhor esta forma de aplicar exceptions
+            Optional.ofNullable(form).orElseThrow(() -> new EntityNotFoundException("Not possible register adress information")); //TODO: entender melhor, forma de aplicar exceptions
 
             Adress adress = new Adress(form);
             adressRepository.save(adress);
             logger.info("Adress registed sucessfull: " + adress.getId());
 
-            Optional.ofNullable(headerLocation).orElseThrow(() -> new StringIndexOutOfBoundsException("Not found param headerLocation")); //TODO: entender melhor como tratar exception
+            Optional.ofNullable(headerLocation).orElseThrow(() -> new StringIndexOutOfBoundsException("Not found param headerLocation")); //TODO: entender melhor, como tratar exception
             Proposal proposal = getPorposalExist(returnLong(headerLocation));
 
             proposal.setAdress(adress);

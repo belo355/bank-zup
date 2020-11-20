@@ -4,7 +4,7 @@ import br.com.hackaton.zup.bank.model.Proposal;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class AccountProposalForm {
 
@@ -18,7 +18,7 @@ public class AccountProposalForm {
     private String email;
 
     @NotNull @Past
-    private Date dateBirth;
+    private LocalDate dateBirth;
 
     @NotNull @CPF
     private String cpf;
@@ -44,7 +44,7 @@ public class AccountProposalForm {
         return email;
     }
 
-    public Date getDateBirth() {
+    public LocalDate getDateBirth() {
         return dateBirth;
     }
 
