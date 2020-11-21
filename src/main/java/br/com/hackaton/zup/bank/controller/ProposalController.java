@@ -23,8 +23,6 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.Optional;
 
@@ -107,7 +105,7 @@ public class ProposalController {
     }
 
     public boolean handleValidProposal(AccountProposalForm proposalForm){
-        boolean status = proposalService.handle(proposalForm);
+        boolean status = proposalService.handleValidProposal(proposalForm);
         return status;
     }
 
