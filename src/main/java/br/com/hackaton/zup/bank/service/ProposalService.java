@@ -44,7 +44,7 @@ public class ProposalService {
                 return false;
             }
         }catch (EntityNotFoundException | ClassCastException  e){
-            logger.info("cpf informado invalido ou existente na base: ", e.getMessage());
+            logger.info("invalid cpf or exists: " + cpf, e.getMessage());
         }
         return false;
     }
@@ -58,7 +58,7 @@ public class ProposalService {
                 return false;
             }
         }catch (EntityNotFoundException | ClassCastException  e){
-            logger.info("email informado invalido ou existente na base: ", e.getMessage());
+            logger.info("invalid e-mail or exists: " + email, e.getMessage());
         }
         return false;
     }

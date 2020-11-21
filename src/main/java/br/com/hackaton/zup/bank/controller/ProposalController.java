@@ -31,6 +31,8 @@ import java.util.Optional;
 @RequestMapping("/abertura-conta")
 public class ProposalController {
 
+    private static final int AGE = 18;
+
     @Autowired
     private ProposalRepository proposalRepository;
 
@@ -44,11 +46,11 @@ public class ProposalController {
 
     @GetMapping("/{id}")
     @Transactional
-    public ResponseEntity<ProposalAccountDto> getProposal(@PathVariable(required = true) Long id){
+    public ResponseEntity<ProposalAccountDto> getProposal(@PathVariable(required = true) Long id) {
         try {
-            Optional<Proposal> proposal =  proposalRepository.findById(id);
+            Optional<Proposal> proposal = proposalRepository.findById(id);
             return ResponseEntity.ok(new ProposalAccountDto(proposal.get()));
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.info("Proposal not found: " + e.getMessage());
         }
         return ResponseEntity.notFound().build();
@@ -56,19 +58,19 @@ public class ProposalController {
 
     @GetMapping("/")
     @Transactional
-    public  ResponseEntity<List<Proposal>> getAllProposal(){
+    public ResponseEntity<List<Proposal>> getAllProposal() {
         List<Proposal> proposals = proposalRepository.findAll();
         return ResponseEntity.ok(proposals);
     }
 
     @GetMapping("/{id}/resume")
     @Transactional
-    public ResponseEntity<ProposalAccountInformationDto> getProposalInformation(@PathVariable(required = true) Long id){
+    public ResponseEntity<ProposalAccountInformationDto> getProposalInformation(@PathVariable(required = true) Long id) {
         try {
             logger.info("Find proposal information resume .. " + id);
-            Optional<Proposal> proposal =  proposalRepository.findById(id);
+            Optional<Proposal> proposal = proposalRepository.findById(id);
             return ResponseEntity.ok(new ProposalAccountInformationDto(proposal.get()));
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.info("Proposal not found" + e.getMessage());
         }
         return ResponseEntity.notFound().build();
@@ -76,47 +78,49 @@ public class ProposalController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String>  registerProposal(@RequestBody @Valid AccountProposalForm form, HttpServletRequest req) throws Exception {
-
-        Optional.ofNullable(form).orElseThrow(() -> new Exception("Not possible register Proposal information")); //TODO: entender melhor, esta forma de aplicar exceptions
+    public ResponseEntity<String> registerProposal(@RequestBody @Valid AccountProposalForm form, HttpServletRequest req) throws Exception {
 
         boolean formProposalValid = handleValidProposal(form);
         boolean ageRange = handleDateBirth(form.getDateBirth());
 
-        if(formProposalValid == true && ageRange == true){ //TODO: AJUSTAR EXCEPPTION PARA DATA DE NASCIMENTO
-            try{
-                Proposal proposal = new Proposal(form);
-                proposalRepository.save(proposal);
-                logger.info("Proposal registed sucessfull: " + proposal.getId());
+        if (formProposalValid == true) {
+            if (ageRange == true) {
+                try {
+                    Proposal proposal = new Proposal(form);
+                    proposalRepository.save(proposal);
 
-                URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/{id}").build()
-                        .expand(proposal.getId()).toUri();
+                    URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/{id}").build()
+                            .expand(proposal.getId()).toUri();
 
-                HttpHeaders headers = new HttpHeaders();
-                headers.setLocation(location);
-                logger.info(("generate location: "+ headers));
-                return new ResponseEntity(headers, HttpStatus.CREATED);
-            }catch (Exception e){
-                return new ResponseEntity("Erro register proposal", HttpStatus.BAD_REQUEST);
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setLocation(location);
+                    logger.info(("Proposal registed sucessfull:" + proposal.getId() + " generate location: " + headers));
+
+                    return new ResponseEntity(headers, HttpStatus.CREATED);
+                } catch (Exception e) {
+                    return new ResponseEntity("Erro register proposal", HttpStatus.BAD_REQUEST);
+                }
+            } else {
+                return new ResponseEntity("Proposal invalid, date birth < 18 years", HttpStatus.BAD_REQUEST);
             }
-        }else {
-            return new ResponseEntity("Proposal invalid CPF or email exists", HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity("Proposal invalid,  CPF or EMAIL exists", HttpStatus.BAD_REQUEST);
         }
     }
 
-    public boolean handleValidProposal(AccountProposalForm proposalForm){
+    public boolean handleValidProposal(AccountProposalForm proposalForm) {
         boolean status = proposalService.handleValidProposal(proposalForm);
         return status;
     }
 
-    public boolean handleDateBirth(LocalDate birth){
+    public boolean handleDateBirth(LocalDate birth) {
         int ageYearBirth = birth.getYear();
         int yearActual = LocalDate.now().getYear();
 
         int ageFinal = yearActual - ageYearBirth;
-        if(ageFinal >= 18){ //TODO: colocar param em variavel static
+        if (ageFinal >= AGE) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
