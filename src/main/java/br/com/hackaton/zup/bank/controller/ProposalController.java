@@ -12,12 +12,14 @@ import br.com.hackaton.zup.bank.repository.ProposalRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.logging.LoggerGroup;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -25,6 +27,8 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+//TODO: ADD JAVADOC
 
 @Slf4j
 @RestController
@@ -97,7 +101,8 @@ public class ProposalController {
                     logger.info(("Proposal registed sucessfull:" + proposal.getId() + " generate location: " + headers));
 
                     return new ResponseEntity(headers, HttpStatus.CREATED);
-                } catch (Exception e) {
+                } catch (EntityNotFoundException e) {
+                    logger.info(e.getMessage());
                     return new ResponseEntity("Erro register proposal", HttpStatus.BAD_REQUEST);
                 }
             } else {

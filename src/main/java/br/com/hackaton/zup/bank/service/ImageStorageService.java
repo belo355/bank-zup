@@ -1,8 +1,11 @@
 package br.com.hackaton.zup.bank.service;
 
 
+import br.com.hackaton.zup.bank.controller.ImageController;
 import br.com.hackaton.zup.bank.model.Image;
 import br.com.hackaton.zup.bank.repository.ImageRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -12,17 +15,26 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+//TODO: ADD JAVADOC
+
 @Service
 public class ImageStorageService {
 
     @Autowired
     private ImageRepository imageRepository;
 
-    public Image store(MultipartFile file) throws IOException {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        Image img = new Image(fileName, file.getContentType(), file.getBytes());
+    Logger logger = LoggerFactory.getLogger(ImageController.class);
 
-        return imageRepository.save(img);
+    public Image store(MultipartFile file) throws IOException {
+        try{
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            Image img = new Image(fileName, file.getContentType(), file.getBytes());
+
+            return imageRepository.save(img);
+        }catch (IOException e){
+            logger.info(e.getMessage());
+        }
+
     }
 
     public Optional<Image> getFile(Long id) {

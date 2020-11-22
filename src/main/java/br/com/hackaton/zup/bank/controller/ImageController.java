@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
+
+//TODO: ADD JAVADOC
 
 @RestController
 @RequestMapping("/abertura-conta/upload")
@@ -38,9 +42,6 @@ public class ImageController {
         String message = "";
         try {
             Image image = storageService.store(file);
-            logger.info("Image Upload sucessfull: " + image.getId());
-
-            logger.info("Find proposal: " + headerLocation);
             Proposal proposal = getPorposalExist(returnLong(headerLocation));
 
             proposal.setImage(image);
@@ -53,7 +54,8 @@ public class ImageController {
             headers.setLocation(location);
 
             return new ResponseEntity(headers, HttpStatus.CREATED);
-        } catch (Exception e) {
+        } catch (EntityNotFoundException | IOException e) {
+            logger.info(e.getMessage());
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessageHandler(message));
         }
@@ -82,7 +84,7 @@ public class ImageController {
     public Proposal getPorposalExist(Long id){
         try{
             return proposalRepository.getOne(id);
-        }catch (Exception e ){
+        }catch (EntityNotFoundException e ){
             logger.info(e.getMessage());
         }
         return null;
