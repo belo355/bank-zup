@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class ImageController {
 
     @Autowired
-    private ImageStorageService storageService;
+    private ImageStorageService imageService;
 
     @Autowired
     private ProposalRepository proposalRepository;
@@ -46,10 +46,10 @@ public class ImageController {
                                                              @RequestHeader(name = "x-com-location", required = true) String headerLocation) {
         String message = "";
         try {
-            Image image = storageService.store(file); //TODO: regularizar retorno metodo store and set na proposta (devolver imagem valida)
-            Proposal proposal = proposalRepository.getOne(returnLong(headerLocation)); //EntityNotFoundException
-
+            Image image = imageService.handleImg(file);
+            Proposal proposal = proposalRepository.getOne(returnLong(headerLocation));//TODO: regularizar get proposal
             proposal.setImage(image);
+
             logger.info("Image : " + image.getId() + " associeted for proposal: "  + proposal.getId());
 
             URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/upload/{id}").build()
@@ -66,10 +66,9 @@ public class ImageController {
         }
     }
 
-
     @GetMapping
     public ResponseEntity<List<ResponseImageHandler>> getListFiles() {
-        List<ResponseImageHandler> files = storageService.getAllFiles().map(dbFile -> {
+        List<ResponseImageHandler> files = imageService.getAllFiles().map(dbFile -> {
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
                     .path("/abertura-conta/upload/")
@@ -87,6 +86,6 @@ public class ImageController {
     }
 
     public Long returnLong(String headerLocation){
-        return Long.parseLong(headerLocation.substring(headerLocation.length() - 1)); //TODO: EXPORTAR METODO E ACEITAR MAIS QUE UM DIGITO
+        return Long.parseLong(headerLocation.substring(headerLocation.length() - 1));
     }
 }

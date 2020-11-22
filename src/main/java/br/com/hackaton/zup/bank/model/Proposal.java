@@ -5,7 +5,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Table(name="Proposal")
@@ -33,7 +32,7 @@ public class Proposal {
     private String cpf;
 
     @OneToOne
-    private Adress adress;
+    private Address address;
 
     @OneToOne
     private Image image;
@@ -84,8 +83,8 @@ public class Proposal {
         return cpf;
     }
 
-    public Adress getAdress() {
-        return adress;
+    public Address getAddress() {
+        return address;
     }
 
     public Image getImage() {
@@ -96,8 +95,8 @@ public class Proposal {
         this.image = image;
     }
 
-    public void setAdress(Adress adress) {
-        this.adress = adress;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     @Override
@@ -111,12 +110,12 @@ public class Proposal {
                 Objects.equals(email, proposal.email) &&
                 Objects.equals(dateBirth, proposal.dateBirth) &&
                 Objects.equals(cpf, proposal.cpf) &&
-                Objects.equals(adress, proposal.adress) &&
+                Objects.equals(address, proposal.address) &&
                 Objects.equals(image, proposal.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, lastName, email, dateBirth, cpf, adress, image);
+        return Objects.hash(id, name, lastName, email, dateBirth, cpf, address, image);
     }
 }

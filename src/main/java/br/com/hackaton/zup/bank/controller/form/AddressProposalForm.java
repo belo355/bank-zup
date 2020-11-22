@@ -1,12 +1,12 @@
 package br.com.hackaton.zup.bank.controller.form;
 
-import br.com.hackaton.zup.bank.model.Adress;
+import br.com.hackaton.zup.bank.model.Address;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-public class AdressProposalForm {
+public class AddressProposalForm {
 
     @NotNull @NotEmpty @Pattern(regexp = "\\d{5}-\\d{3}", message = "cep invalido")
     private String cep;
@@ -26,8 +26,8 @@ public class AdressProposalForm {
     @NotNull @NotEmpty
     private String state;
 
-    public AdressProposalForm(){}
-    public AdressProposalForm(Adress adress) {
+    public AddressProposalForm(){}
+    public AddressProposalForm(Address adress) {
         this.cep = getCep();
         this.street = getStreet();
         this.region = getRegion();

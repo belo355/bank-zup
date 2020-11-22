@@ -1,6 +1,6 @@
 package br.com.hackaton.zup.bank.controller.dto;
 
-import br.com.hackaton.zup.bank.model.Adress;
+import br.com.hackaton.zup.bank.model.Address;
 
 public class AdressAccountDto {
 
@@ -11,13 +11,13 @@ public class AdressAccountDto {
     private String city;
     private String state;
 
-    public AdressAccountDto(Adress adress) {
-        this.cep = adress.getCep();
-        this.street = adress.getStreet();
-        this.region = adress.getRegion();
-        this.complement = adress.getComplement();
-        this.city = adress.getCity();
-        this.state = adress.getState();
+    public AdressAccountDto(Address address) {
+        this.cep = address.getCep();
+        this.street = address.getStreet();
+        this.region = address.getRegion();
+        this.complement = address.getComplement();
+        this.city = address.getCity();
+        this.state = address.getState();
     }
 
     public String getCep() {

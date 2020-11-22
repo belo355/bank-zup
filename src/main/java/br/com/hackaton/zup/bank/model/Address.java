@@ -1,13 +1,12 @@
 package br.com.hackaton.zup.bank.model;
 
-import br.com.hackaton.zup.bank.controller.form.AdressProposalForm;
+import br.com.hackaton.zup.bank.controller.form.AddressProposalForm;
 
 import javax.persistence.*;
-import java.util.Optional;
 
-@Table(name="Adress")
+@Table(name="Address")
 @Entity
-public class Adress {
+public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,9 +30,8 @@ public class Adress {
     @Column(name="estado")
     private String state;
 
-    //TODO: corrigir adress to address em todo projeto
-    public Adress() {}
-    public Adress(String cep, String street, String region, String complement, String city, String state) {
+    public Address() {}
+    public Address(String cep, String street, String region, String complement, String city, String state) {
         this.cep = cep;
         this.street = street;
         this.region = region;
@@ -42,7 +40,7 @@ public class Adress {
         this.state = state;
     }
 
-    public Adress(AdressProposalForm form) {
+    public Address(AddressProposalForm form) {
         this.cep = form.getCep();
         this.street = form.getStreet();
         this.region = form.getRegion();

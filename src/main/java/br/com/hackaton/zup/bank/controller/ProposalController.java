@@ -2,7 +2,7 @@ package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.controller.dto.ProposalAccountDto;
 import br.com.hackaton.zup.bank.controller.dto.ProposalAccountInformationDto;
-import br.com.hackaton.zup.bank.repository.AdressRepository;
+import br.com.hackaton.zup.bank.repository.AddressRepository;
 import br.com.hackaton.zup.bank.service.ProposalService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,7 +48,7 @@ public class ProposalController {
     private ProposalService proposalService;
 
     @Autowired
-    private AdressRepository adressRepository;
+    private AddressRepository adressRepository;
 
     Logger logger = LoggerFactory.getLogger(ProposalController.class);
 
@@ -110,7 +110,7 @@ public class ProposalController {
                     headers.setLocation(location);
                     logger.info(("Proposal registed sucessfull:" + proposal.getId() + " generate location: " + headers));
 
-                    return new ResponseEntity(headers, HttpStatus.CREATED);
+                    return new ResponseEntity("create proposal sucessfull", headers, HttpStatus.CREATED);
                 } catch (EntityNotFoundException e) {
                     logger.info(e.getMessage());
                     return new ResponseEntity("Erro register proposal", HttpStatus.BAD_REQUEST);

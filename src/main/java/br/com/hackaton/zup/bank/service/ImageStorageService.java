@@ -1,7 +1,5 @@
 package br.com.hackaton.zup.bank.service;
 
-
-import br.com.hackaton.zup.bank.controller.ImageController;
 import br.com.hackaton.zup.bank.model.Image;
 import br.com.hackaton.zup.bank.repository.ImageRepository;
 import org.slf4j.Logger;
@@ -30,7 +28,7 @@ public class ImageStorageService {
 
     Logger logger = LoggerFactory.getLogger(ImageStorageService.class);
 
-    public Image store(MultipartFile file) throws IOException {
+    public Image handleImg(MultipartFile file) throws IOException {
         try{
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             Image img = new Image(fileName, file.getContentType(), file.getBytes());

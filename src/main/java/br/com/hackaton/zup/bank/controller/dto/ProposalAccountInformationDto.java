@@ -1,11 +1,10 @@
 package br.com.hackaton.zup.bank.controller.dto;
 
-import br.com.hackaton.zup.bank.model.Adress;
+import br.com.hackaton.zup.bank.model.Address;
 import br.com.hackaton.zup.bank.model.Image;
 import br.com.hackaton.zup.bank.model.Proposal;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class ProposalAccountInformationDto {
 
@@ -15,7 +14,7 @@ public class ProposalAccountInformationDto {
     private LocalDate dateBirth;
     private String cpf;
 
-    private Adress adress;
+    private Address address;
     private Image image;
 
 
@@ -25,7 +24,7 @@ public class ProposalAccountInformationDto {
         this.email = proposal.getEmail();
         this.dateBirth = proposal.getDateBirth();
         this.cpf = proposal.getCpf();
-        this.adress = proposal.getAdress();
+        this.address = proposal.getAddress();
         this.image = proposal.getImage();
     }
 
@@ -56,8 +55,8 @@ public class ProposalAccountInformationDto {
     }
 
 
-    public Adress getAdress() {
-        return adress;
+    public Address getAdress() {
+        return address;
     }
 
     public Image getImage() {

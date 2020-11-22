@@ -1,10 +1,10 @@
 package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.controller.dto.AdressAccountDto;
-import br.com.hackaton.zup.bank.controller.form.AdressProposalForm;
-import br.com.hackaton.zup.bank.model.Adress;
+import br.com.hackaton.zup.bank.controller.form.AddressProposalForm;
+import br.com.hackaton.zup.bank.model.Address;
 import br.com.hackaton.zup.bank.model.Proposal;
-import br.com.hackaton.zup.bank.repository.AdressRepository;
+import br.com.hackaton.zup.bank.repository.AddressRepository;
 import br.com.hackaton.zup.bank.repository.ProposalRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,21 +29,21 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/abertura-conta/endereco")
-public class AdressController {
+public class AddressController {
 
     @Autowired
-    private AdressRepository adressRepository;
+    private AddressRepository addressRepository;
 
     @Autowired
     private ProposalRepository proposalRepository;
 
-    Logger logger = LoggerFactory.getLogger(AdressController.class);
+    Logger logger = LoggerFactory.getLogger(AddressController.class);
 
     @GetMapping
     @Transactional
-    public ResponseEntity<List<Adress>> getAdresses() {
+    public ResponseEntity<List<Address>> getAdresses() {
         try {
-            List<Adress> adresses = adressRepository.findAll();
+            List<Address> adresses = addressRepository.findAll();
             return ResponseEntity.ok(adresses);
         } catch (EntityNotFoundException e) {
             logger.info(e.getMessage());
@@ -55,8 +55,8 @@ public class AdressController {
     @Transactional
     public ResponseEntity<AdressAccountDto> getAdressDetail(@PathVariable(required = true) Long id) {
         try {
-            Optional<Adress> adress = adressRepository.findById(id);
-            return ResponseEntity.ok(new AdressAccountDto(adress.get()));
+            Optional<Address> adresses = addressRepository.findById(id);
+            return ResponseEntity.ok(new AdressAccountDto(adresses.get()));
         } catch (Exception e) {
             logger.info("Adress not found" + e.getMessage());
         }
@@ -65,17 +65,17 @@ public class AdressController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> registerAdress(@RequestBody @Valid AdressProposalForm form,
+    public ResponseEntity<String> registerAdress(@RequestBody @Valid AddressProposalForm form,
                                                  @RequestHeader(name = "x-com-location", required = true) String headerLocation) throws StringIndexOutOfBoundsException {
         try {
-            Adress adress = new Adress(form);
-            adressRepository.save(adress);
+            Address address = new Address(form);
+            addressRepository.save(address);
             logger.info("Saved adress sucefull");
 
-            if (adress.getId() != null) {
+            if (address.getId() != null) {
                 try {
                     Proposal proposal = proposalRepository.getOne(returnLong(headerLocation));
-                    proposal.setAdress(adress);
+                    proposal.setAddress(address);
                     logger.info("liked adress for proposal-id {}", proposal.getId());
                 } catch (EntityNotFoundException e) {
                     return new ResponseEntity("Proposal not found", HttpStatus.BAD_REQUEST);
@@ -84,7 +84,7 @@ public class AdressController {
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
 
-            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/endereco/{id}").build().expand(adress.getId()).toUri();
+            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/endereco/{id}").build().expand(address.getId()).toUri();
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(location);
             return new ResponseEntity(headers, HttpStatus.CREATED);
@@ -94,7 +94,6 @@ public class AdressController {
             return new ResponseEntity("", HttpStatus.BAD_REQUEST);
         }
     }
-
 
     public Optional<Proposal> getHeaderLocation(String headerLocation) {
         try {
