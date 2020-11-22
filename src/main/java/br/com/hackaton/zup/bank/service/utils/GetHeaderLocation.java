@@ -1,6 +1,13 @@
 package br.com.hackaton.zup.bank.service.utils;
 
-public class GetHeaderLocation {
+/**
+ *
+ * @author:
+ * @apiNote:
+ *
+ */
 
+public class GetHeaderLocation {
+ //TODO:export method getHeader
 
 }

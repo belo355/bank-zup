@@ -31,10 +31,7 @@ public class Adress {
     @Column(name="estado")
     private String state;
 
-//    @OneToOne
-//    private Proposal proposal;
-
-
+    //TODO: corrigir adress to address em todo projeto
     public Adress() {}
     public Adress(String cep, String street, String region, String complement, String city, String state) {
         this.cep = cep;

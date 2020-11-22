@@ -19,7 +19,13 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
+
+/**
+ * @author: Edilson Belo
+ * @apiNote:
+ */
 
 @RestController
 @RequestMapping("/abertura-conta/endereco")
@@ -33,9 +39,21 @@ public class AdressController {
 
     Logger logger = LoggerFactory.getLogger(AdressController.class);
 
+    @GetMapping
+    @Transactional
+    public ResponseEntity<List<Adress>> getAdresses() {
+        try {
+            List<Adress> adresses = adressRepository.findAll();
+            return ResponseEntity.ok(adresses);
+        } catch (EntityNotFoundException e) {
+            logger.info(e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/{id}")
     @Transactional
-    public ResponseEntity<AdressAccountDto> getAdress(@PathVariable(required = true) Long id) {
+    public ResponseEntity<AdressAccountDto> getAdressDetail(@PathVariable(required = true) Long id) {
         try {
             Optional<Adress> adress = adressRepository.findById(id);
             return ResponseEntity.ok(new AdressAccountDto(adress.get()));
@@ -50,52 +68,45 @@ public class AdressController {
     public ResponseEntity<String> registerAdress(@RequestBody @Valid AdressProposalForm form,
                                                  @RequestHeader(name = "x-com-location", required = true) String headerLocation) throws StringIndexOutOfBoundsException {
         try {
-            Optional.ofNullable(form).orElseThrow(() -> new EntityNotFoundException("Not possible register adress information")); //TODO: entender melhor, forma de aplicar exceptions
-
             Adress adress = new Adress(form);
             adressRepository.save(adress);
-            logger.info("Adress registed sucessfull: " + adress.getId());
+            logger.info("Saved adress sucefull");
 
-            Optional.ofNullable(headerLocation).orElseThrow(() -> new StringIndexOutOfBoundsException("Not found param headerLocation")); //TODO: entender melhor, como tratar exception
-            Proposal proposal = getPorposalExist(returnLong(headerLocation));
+            if (adress.getId() != null) {
+                try {
+                    Proposal proposal = proposalRepository.getOne(returnLong(headerLocation));
+                    proposal.setAdress(adress);
+                    logger.info("liked adress for proposal-id {}", proposal.getId());
+                } catch (EntityNotFoundException e) {
+                    return new ResponseEntity("Proposal not found", HttpStatus.BAD_REQUEST);
+                }
+            } else {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
 
-            proposal.setAdress(adress);
-            logger.info("Adress : [" + adress.getStreet() + "] associeted for proposal: "  + proposal.getId());
-
-            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/endereco/{id}")
-                    .build().expand(adress.getId()).toUri();
-
+            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/endereco/{id}").build().expand(adress.getId()).toUri();
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(location);
-
             return new ResponseEntity(headers, HttpStatus.CREATED);
+
         } catch (EntityNotFoundException e) {
             logger.info("Not possible register adress information  " + e.getMessage());
             return new ResponseEntity("", HttpStatus.BAD_REQUEST);
         }
     }
 
-    public Proposal getPorposalExist(Long id){
-        try{
-            return proposalRepository.getOne(id);
-        }catch (Exception e ){
-            logger.info(e.getMessage());
-        }
-        return null;
-    }
 
-
-    public Optional<Proposal> getHeaderLocation(String headerLocation){
-        try{
-            Optional<Proposal> proposal =  proposalRepository.findById(returnLong(headerLocation));
+    public Optional<Proposal> getHeaderLocation(String headerLocation) {
+        try {
+            Optional<Proposal> proposal = proposalRepository.findById(returnLong(headerLocation));
             return proposal;
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             logger.info(e.getMessage());
-           return null;
+            return null;
         }
     }
 
-    public Long returnLong(String headerLocation){
+    public Long returnLong(String headerLocation) {
         return Long.parseLong(headerLocation.substring(headerLocation.length() - 1)); //TODO: MELHORAR PARA PEGAR INFORMACOES APOS A BARRA ( EXEMPLO ID 10 )
     }
 

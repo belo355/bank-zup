@@ -1,6 +1,5 @@
 package br.com.hackaton.zup.bank.service;
 
-import br.com.hackaton.zup.bank.controller.ProposalController;
 import br.com.hackaton.zup.bank.controller.form.AccountProposalForm;
 import br.com.hackaton.zup.bank.repository.ProposalRepository;
 import org.slf4j.Logger;
@@ -10,6 +9,14 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+
+
+/**
+ *
+ * @author: Edilson Belo
+ * @apiNote:
+ *
+ */
 
 @Service
 public class ProposalService {

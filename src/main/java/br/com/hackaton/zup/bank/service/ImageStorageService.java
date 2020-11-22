@@ -15,7 +15,12 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-//TODO: ADD JAVADOC
+/**
+ *
+ * @author: Edilson Belo
+ * @apiNote:
+ *
+ */
 
 @Service
 public class ImageStorageService {
@@ -23,18 +28,18 @@ public class ImageStorageService {
     @Autowired
     private ImageRepository imageRepository;
 
-    Logger logger = LoggerFactory.getLogger(ImageController.class);
+    Logger logger = LoggerFactory.getLogger(ImageStorageService.class);
 
     public Image store(MultipartFile file) throws IOException {
         try{
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             Image img = new Image(fileName, file.getContentType(), file.getBytes());
-
-            return imageRepository.save(img);
+            imageRepository.save(img);
+            return img;
         }catch (IOException e){
             logger.info(e.getMessage());
+            return null;
         }
-
     }
 
     public Optional<Image> getFile(Long id) {

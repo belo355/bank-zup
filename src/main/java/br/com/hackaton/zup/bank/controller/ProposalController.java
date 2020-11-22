@@ -12,7 +12,6 @@ import br.com.hackaton.zup.bank.repository.ProposalRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.logging.LoggerGroup;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-//TODO: ADD JAVADOC
+/**
+ *
+ * @author:
+ * @apiNote:
+ *
+ */
 
 @Slf4j
 @RestController
@@ -48,6 +52,19 @@ public class ProposalController {
 
     Logger logger = LoggerFactory.getLogger(ProposalController.class);
 
+
+    @GetMapping
+    @Transactional
+    public ResponseEntity<List<Proposal>> getAllProposal() {
+        try{
+            List<Proposal> proposals = proposalRepository.findAll();
+            return ResponseEntity.ok(proposals);
+        }catch (EntityNotFoundException e){
+            logger.info(e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/{id}")
     @Transactional
     public ResponseEntity<ProposalAccountDto> getProposal(@PathVariable(required = true) Long id) {
@@ -58,13 +75,6 @@ public class ProposalController {
             logger.info("Proposal not found: " + e.getMessage());
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping("/")
-    @Transactional
-    public ResponseEntity<List<Proposal>> getAllProposal() {
-        List<Proposal> proposals = proposalRepository.findAll();
-        return ResponseEntity.ok(proposals);
     }
 
     @GetMapping("/{id}/resume")

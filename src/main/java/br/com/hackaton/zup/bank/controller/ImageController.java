@@ -22,7 +22,12 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//TODO: ADD JAVADOC
+/**
+ *
+ * @author:
+ * @apiNote:
+ *
+ */
 
 @RestController
 @RequestMapping("/abertura-conta/upload")
@@ -41,8 +46,8 @@ public class ImageController {
                                                              @RequestHeader(name = "x-com-location", required = true) String headerLocation) {
         String message = "";
         try {
-            Image image = storageService.store(file);
-            Proposal proposal = getPorposalExist(returnLong(headerLocation));
+            Image image = storageService.store(file); //TODO: regularizar retorno metodo store and set na proposta (devolver imagem valida)
+            Proposal proposal = proposalRepository.getOne(returnLong(headerLocation)); //EntityNotFoundException
 
             proposal.setImage(image);
             logger.info("Image : " + image.getId() + " associeted for proposal: "  + proposal.getId());
@@ -81,19 +86,7 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 
-    public Proposal getPorposalExist(Long id){
-        try{
-            return proposalRepository.getOne(id);
-        }catch (EntityNotFoundException e ){
-            logger.info(e.getMessage());
-        }
-        return null;
-    }
-
     public Long returnLong(String headerLocation){
-        return Long.parseLong(headerLocation.substring(headerLocation.length() - 1));
+        return Long.parseLong(headerLocation.substring(headerLocation.length() - 1)); //TODO: EXPORTAR METODO E ACEITAR MAIS QUE UM DIGITO
     }
-
-
-
 }
