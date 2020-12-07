@@ -110,7 +110,7 @@ public class ProposalController {
                     headers.setLocation(location);
                     logger.info(("Proposal registed sucessfull:" + proposal.getId() + " generate location: " + headers));
 
-                    return new ResponseEntity("create proposal sucessfull", headers, HttpStatus.CREATED);
+                    return new ResponseEntity(headers, HttpStatus.CREATED);
                 } catch (EntityNotFoundException e) {
                     logger.info(e.getMessage());
                     return new ResponseEntity("Erro register proposal", HttpStatus.BAD_REQUEST);

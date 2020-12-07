@@ -31,6 +31,10 @@ import java.util.Optional;
 @RequestMapping("/abertura-conta/endereco")
 public class AddressController {
 
+    private static String ENV_LOCATION = "http://localhost:8080";
+    private static String ENDPOINT = "/abertura-conta/";
+
+
     @Autowired
     private AddressRepository addressRepository;
 
@@ -55,9 +59,9 @@ public class AddressController {
     @Transactional
     public ResponseEntity<AdressAccountDto> getAdressDetail(@PathVariable(required = true) Long id) {
         try {
-            Optional<Address> adresses = addressRepository.findById(id);
-            return ResponseEntity.ok(new AdressAccountDto(adresses.get()));
-        } catch (Exception e) {
+            Optional<Address> address = addressRepository.findById(id);
+            return ResponseEntity.ok(new AdressAccountDto(address.get()));
+        } catch (IllegalArgumentException e) {
             logger.info("Adress not found" + e.getMessage());
         }
         return ResponseEntity.notFound().build();
@@ -77,7 +81,7 @@ public class AddressController {
                     Proposal proposal = proposalRepository.getOne(returnLong(headerLocation));
                     proposal.setAddress(address);
                     logger.info("liked adress for proposal-id {}", proposal.getId());
-                } catch (EntityNotFoundException e) {
+                } catch (Exception e) {
                     return new ResponseEntity("Proposal not found", HttpStatus.BAD_REQUEST);
                 }
             } else {
