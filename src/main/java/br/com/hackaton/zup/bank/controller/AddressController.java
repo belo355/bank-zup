@@ -110,7 +110,7 @@ public class AddressController {
     }
 
     public Long returnLong(String headerLocation) {
-        return Long.parseLong(headerLocation.substring(headerLocation.length() - 1)); //TODO: MELHORAR PARA PEGAR INFORMACOES APOS A BARRA ( EXEMPLO ID 10 )
+        return Long.parseLong(headerLocation.substring(headerLocation.length() - 1)); //TODO: MELHORAR PARA PEGAR INFORMACOES APOS A BARRA ( EXEMPLO ID 10 ), utilizar variaveis staticas
     }
 
 }

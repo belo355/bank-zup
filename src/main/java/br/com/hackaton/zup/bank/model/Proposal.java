@@ -38,6 +38,12 @@ public class Proposal {
     private Image image;
 
     public Proposal() {}
+
+    public Proposal(String name, String lastName, String email ) {
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+    }
     public Proposal(String name, String lastName, String email, LocalDate dateBirth, String cpf) {
         this.name = name;
         this.lastName = lastName;
