@@ -1,6 +1,6 @@
 
 <h4 align="center">
-  🚀 Bootcamp ZUP 2020 
+  🚀 Bootcamp ZUP 2020
 </h4>
 
 <br>
@@ -16,7 +16,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 # 💻 Projeto
 ```
 
-Projeto desenvolvido durante Bootcamp ZUP 2020, tem como objetivo a criação de aplicação backend para atendimento de cliente em fluxo de um banco online;   
+Projeto desenvolvido durante Bootcamp ZUP 2020, tem como objetivo a criação de aplicação backend para um banco digital;   
 
 ```
 # 🔖 Documentação
