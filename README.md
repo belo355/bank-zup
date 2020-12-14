@@ -1,6 +1,6 @@
 
 <h4 align="center">
-  🚀 Bootcamp ZUP 
+  🚀 Bootcamp ZUP 2020 
 </h4>
 
 <br>
