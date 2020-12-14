@@ -11,12 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -62,7 +60,7 @@ public class AddressControllerTest {
                         .is(400));
     }
 
-//TODO: Necessario criar proposal para parametro x-location
+//TODO: Necessario criar proposal para parametro x-location,  necessario criar prospota
 //    @Test
 //    public void get201ForRegistreAddress() throws Exception {
 //
