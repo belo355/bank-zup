@@ -25,12 +25,11 @@ public class AddressControllerTest {
     @Autowired
     private AddressRepository repository;
 
-
     @Autowired
     private MockMvc mock;
 
     @Test
-    public void getAdressDetailUnityTest(){
+    public void getAddressDetailUnityTest(){
         Long id = 1L;
         Address address = repository.getOne(id);
         Assert.assertNotNull(address);
@@ -44,7 +43,35 @@ public class AddressControllerTest {
     }
 
     @Test
-    public void get400ForRegistreAddress() throws Exception {
+    public void get400ForRegisterAddress() throws Exception {
+
+        URI uri = new URI("/abertura-conta/endereco");
+        String XLocationHeaders = "http://localhost:8080/abertura-conta/1";
+        String jsonRequest = "{\"cep\": \"0\", \"city\":\"São Paulo\", \"complement\":\"NA\",\"region\":\"CENTRO\",\"state\":\"São Paulo\",\"street\":\"Av das Oliveira,221\"}";
+
+        mock.perform(MockMvcRequestBuilders
+                .post(uri)
+                .content(jsonRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("x-com-location", XLocationHeaders))
+                .andExpect(MockMvcResultMatchers
+                        .status()
+                        .is(400));
+    }
+
+    @Test
+    public void get201ForRegisterAddress() throws Exception {
+        //TODO: entender pq este teste nao executa com os demais
+        URI uriProposal = new URI("/abertura-conta");
+        String jsonRequestProposal = "{\"cpf\": \"42036080820\", \"dateBirth\":\"2000-02-20\", \"email\":\"email@contato.com\",\"lastName\":\"Silva\",\"name\":\"Maria\"}";
+
+        mock.perform(MockMvcRequestBuilders
+                .post(uriProposal)
+                .content(jsonRequestProposal)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers
+                        .status()
+                        .is(201));
 
         URI uri = new URI("/abertura-conta/endereco");
         String XLocationHeaders = "http://localhost:8080/abertura-conta/1";
@@ -57,25 +84,7 @@ public class AddressControllerTest {
                 .header("x-com-location", XLocationHeaders))
                 .andExpect(MockMvcResultMatchers
                         .status()
-                        .is(400));
+                        .is(201));
     }
-
-//TODO: Necessario criar proposal para parametro x-location,  necessario criar prospota
-//    @Test
-//    public void get201ForRegistreAddress() throws Exception {
-//
-//        URI uri = new URI("/abertura-conta/endereco");
-//        String XLocationHeaders = "http://localhost:8080/abertura-conta/1";
-//        String jsonRequest = "{\"cep\": \"04811-120\", \"city\":\"São Paulo\", \"complement\":\"NA\",\"region\":\"CENTRO\",\"state\":\"São Paulo\",\"street\":\"Av das Oliveira,221\"}";
-//
-//        mock.perform(MockMvcRequestBuilders
-//                .post(uri)
-//                .content(jsonRequest)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .header("x-com-location", XLocationHeaders))
-//                .andExpect(MockMvcResultMatchers
-//                        .status()
-//                        .is(400));
-//    }
 }
 

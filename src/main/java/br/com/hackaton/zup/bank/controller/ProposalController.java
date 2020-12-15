@@ -47,11 +47,7 @@ public class ProposalController {
     @Autowired
     private ProposalService proposalService;
 
-    @Autowired
-    private AddressRepository adressRepository;
-
     Logger logger = LoggerFactory.getLogger(ProposalController.class);
-
 
     @GetMapping
     @Transactional
@@ -92,7 +88,7 @@ public class ProposalController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> registerProposal(@RequestBody @Valid AccountProposalForm form, HttpServletRequest req) throws Exception {
+    public ResponseEntity<String> registerProposal(@RequestBody @Valid AccountProposalForm form) {
 
         boolean formProposalValid = handleValidProposal(form);
         boolean ageRange = handleDateBirth(form.getDateBirth());
