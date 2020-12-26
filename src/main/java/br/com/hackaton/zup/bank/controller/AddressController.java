@@ -19,8 +19,10 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author: Edilson Belo
@@ -78,7 +80,7 @@ public class AddressController {
 
             if (address.getId() != null) {
                 try {
-                    Proposal proposal = proposalRepository.getOne(returnLong(headerLocation));
+                    Proposal proposal = proposalRepository.getOne(returnHeaderIdLocation(headerLocation));
                     proposal.setAddress(address);
                     logger.info("liked adress for proposal-id {}", proposal.getId());
                 } catch (Exception e) {
@@ -101,7 +103,7 @@ public class AddressController {
 
     public Optional<Proposal> getHeaderLocation(String headerLocation) {
         try {
-            Optional<Proposal> proposal = proposalRepository.findById(returnLong(headerLocation));
+            Optional<Proposal> proposal = proposalRepository.findById(returnHeaderIdLocation(headerLocation));
             return proposal;
         } catch (NullPointerException e) {
             logger.info(e.getMessage());
@@ -109,8 +111,8 @@ public class AddressController {
         }
     }
 
-    public Long returnLong(String headerLocation) {
-        return Long.parseLong(headerLocation.substring(headerLocation.length() - 1)); //TODO: MELHORAR PARA PEGAR INFORMACOES APOS A BARRA ( EXEMPLO ID 10 ), utilizar variaveis staticas
+    public Long returnHeaderIdLocation(String headerLocation) {
+        return Long.parseLong(headerLocation);
     }
 
 }

@@ -2,7 +2,6 @@ package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.controller.dto.ProposalAccountDto;
 import br.com.hackaton.zup.bank.controller.dto.ProposalAccountInformationDto;
-import br.com.hackaton.zup.bank.repository.AddressRepository;
 import br.com.hackaton.zup.bank.service.ProposalService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.EntityNotFoundException;
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
