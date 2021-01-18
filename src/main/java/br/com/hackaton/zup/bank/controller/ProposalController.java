@@ -34,7 +34,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping("/abertura-conta")
+@RequestMapping("/proposal")
 public class ProposalController {
 
     private static final int AGE = 18;
@@ -49,7 +49,7 @@ public class ProposalController {
 
     @GetMapping
     @Transactional
-    public ResponseEntity<List<Proposal>> getAllProposal() {
+    public ResponseEntity<List<Proposal>> getAll() {
         try{
             List<Proposal> proposals = proposalRepository.findAll();
             return ResponseEntity.ok(proposals);
@@ -61,7 +61,7 @@ public class ProposalController {
 
     @GetMapping("/{id}")
     @Transactional
-    public ResponseEntity<ProposalAccountDto> getProposal(@PathVariable(required = true) Long id) {
+    public ResponseEntity<ProposalAccountDto> getOne(@PathVariable(required = true) Long id) {
         try {
             Optional<Proposal> proposal = proposalRepository.findById(id);
             return ResponseEntity.ok(new ProposalAccountDto(proposal.get()));
@@ -73,7 +73,7 @@ public class ProposalController {
 
     @GetMapping("/{id}/resume")
     @Transactional
-    public ResponseEntity<ProposalAccountInformationDto> getProposalInformation(@PathVariable(required = true) Long id) {
+    public ResponseEntity<ProposalAccountInformationDto> getDetails(@PathVariable(required = true) Long id) {
         try {
             logger.info("Find proposal information resume .. " + id);
             Optional<Proposal> proposal = proposalRepository.findById(id);
@@ -86,7 +86,7 @@ public class ProposalController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> registerProposal(@RequestBody @Valid AccountProposalForm form) {
+    public ResponseEntity<String> register(@RequestBody @Valid AccountProposalForm form) {
 
         boolean formProposalValid = handleValidProposal(form);
         boolean ageRange = handleDateBirth(form.getDateBirth());

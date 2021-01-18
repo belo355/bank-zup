@@ -68,7 +68,7 @@ public class ImageController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ResponseImageHandler>> getListFiles() {
+    public ResponseEntity<List<ResponseImageHandler>> getAll() {
         List<ResponseImageHandler> files = imageService.getAllFiles().map(dbFile -> {
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()

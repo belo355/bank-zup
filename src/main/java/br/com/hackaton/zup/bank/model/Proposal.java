@@ -60,26 +60,21 @@ public class Proposal {
         this.cpf = form.getCpf();
     }
 
-
     public Long getId() {
         return id;
     }
-
 
     public String getName() {
         return name;
     }
 
-
     public String getLastName() {
         return lastName;
     }
 
-
     public String getEmail() {
         return email;
     }
-
 
     public LocalDate getDateBirth() {
         return dateBirth;
@@ -97,12 +92,10 @@ public class Proposal {
         return image;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
     public void setAddress(Address address) {
-        this.address = address;
+        this.setAddress(address);
+    }
+    public void setImage(Image image) {
     }
 
     @Override
@@ -124,4 +117,6 @@ public class Proposal {
     public int hashCode() {
         return Objects.hash(id, name, lastName, email, dateBirth, cpf, address, image);
     }
+
+
 }

@@ -29,7 +29,7 @@ import java.util.Optional;
  */
 
 @RestController
-@RequestMapping("/abertura-conta/endereco")
+@RequestMapping("/proposal/endereco")
 public class AddressController {
 
     private static String ENV_LOCATION = "http://localhost:8080";
@@ -46,7 +46,7 @@ public class AddressController {
 
     @GetMapping
     @Transactional
-    public ResponseEntity<List<Address>> getAdresses() {
+    public ResponseEntity<List<Address>> getAll() {
         try {
             List<Address> adresses = addressRepository.findAll();
             return ResponseEntity.ok(adresses);
