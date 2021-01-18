@@ -34,10 +34,6 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("/proposal/endereco")
 public class AddressController {
 
-    private static String ENV_LOCATION = "http://localhost:8080";
-    private static String ENDPOINT = "/proposal/";
-
-
     @Autowired
     private AddressRepository addressRepository;
 
@@ -81,9 +77,9 @@ public class AddressController {
 
             if (address.getId() != null) {
                 try {
-                    Proposal proposal = proposalRepository.getOne(HandleIIdLocation.handle(headerLocation));
-                    proposal.setAddress(address); //TODO:REGULARIZAR aqui
-                    logger.info("liked adress for proposal-id {}", proposal.getId());
+                    Optional<Proposal> proposal = proposalRepository.findById(HandleIIdLocation.handle(headerLocation));
+                    proposal.ifPresent(p -> p.setAddress(address)); //TODO: REGULARIZAR DAQ
+//                    logger.info("liked adress for proposal-id {}", proposal.getId());
                 } catch (Exception e) {
                     logger.info("headerLocation {}", headerLocation);
                     return new ResponseEntity("Proposal not found", BAD_REQUEST);

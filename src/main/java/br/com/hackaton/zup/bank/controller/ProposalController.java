@@ -1,7 +1,6 @@
 package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.controller.dto.ProposalAccountDto;
-import br.com.hackaton.zup.bank.controller.dto.ProposalAccountInformationDto;
 import br.com.hackaton.zup.bank.service.ProposalService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,19 +26,12 @@ import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
-/**
- *
- * @author:
- * @apiNote:
- *
- */
-
 @Slf4j
 @RestController
 @RequestMapping("/proposal")
 public class ProposalController {
 
-    private static final int AGE = 18;
+    private static final int AGE_BIRTH = 18;
 
     @Autowired
     private ProposalRepository proposalRepository;
@@ -73,19 +65,6 @@ public class ProposalController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/{id}/resume")
-    @Transactional
-    public ResponseEntity<ProposalAccountInformationDto> getDetails(@PathVariable(required = true) Long id) {
-        try {
-            logger.info("Find proposal information resume .. " + id);
-            Optional<Proposal> proposal = proposalRepository.findById(id);
-            return ResponseEntity.ok(new ProposalAccountInformationDto(proposal.get()));
-        } catch (Exception e) {
-            logger.info("Proposal not found" + e.getMessage());
-        }
-        return ResponseEntity.notFound().build();
-    }
-
     @PostMapping
     @Transactional
     public ResponseEntity<String> register(@RequestBody @Valid AccountProposalForm form) {
@@ -99,7 +78,7 @@ public class ProposalController {
                     Proposal proposal = new Proposal(form);
                     proposalRepository.save(proposal);
 
-                    URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/proposal/{id}").build() //TODO: ALTERAR URI MANUAL
+                    URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/proposal/{id}").build()
                             .expand(proposal.getId()).toUri();
 
                     HttpHeaders headers = new HttpHeaders();
@@ -128,7 +107,7 @@ public class ProposalController {
         int yearActual = LocalDate.now().getYear();
 
         int ageFinal = yearActual - ageYearBirth;
-        if (ageFinal >= AGE) {
+        if (ageFinal >= AGE_BIRTH) {
             return true;
         } else {
             return false;
