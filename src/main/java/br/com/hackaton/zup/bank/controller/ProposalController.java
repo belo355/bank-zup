@@ -25,6 +25,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
 /**
  *
  * @author:
@@ -97,7 +99,7 @@ public class ProposalController {
                     Proposal proposal = new Proposal(form);
                     proposalRepository.save(proposal);
 
-                    URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/{id}").build()
+                    URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/proposal/{id}").build() //TODO: ALTERAR URI MANUAL
                             .expand(proposal.getId()).toUri();
 
                     HttpHeaders headers = new HttpHeaders();
@@ -107,13 +109,13 @@ public class ProposalController {
                     return new ResponseEntity(headers, HttpStatus.CREATED);
                 } catch (EntityNotFoundException e) {
                     logger.info(e.getMessage());
-                    return new ResponseEntity("Erro register proposal", HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity("Erro register proposal", BAD_REQUEST);
                 }
             } else {
-                return new ResponseEntity("Proposal invalid, date birth < 18 years", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity("Proposal invalid, date birth < 18 years", BAD_REQUEST);
             }
         } else {
-            return new ResponseEntity("Proposal invalid,  CPF or EMAIL exists", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Proposal invalid,  CPF or EMAIL exists", BAD_REQUEST);
         }
     }
 

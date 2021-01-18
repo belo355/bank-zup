@@ -23,6 +23,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static sun.security.timestamp.TSResponse.BAD_REQUEST;
+
 /**
  *
  * @author:
@@ -63,7 +65,7 @@ public class ImageController {
         } catch (EntityNotFoundException | IOException e) {
             logger.info(e.getMessage());
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessageHandler(message));
+            return ResponseEntity.status(BAD_REQUEST).body(new ResponseMessageHandler(message));
         }
     }
 

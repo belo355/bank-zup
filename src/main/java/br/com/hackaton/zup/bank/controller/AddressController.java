@@ -33,7 +33,7 @@ import java.util.Optional;
 public class AddressController {
 
     private static String ENV_LOCATION = "http://localhost:8080";
-    private static String ENDPOINT = "/abertura-conta/";
+    private static String ENDPOINT = "/proposal/";
 
 
     @Autowired
@@ -80,7 +80,7 @@ public class AddressController {
             if (address.getId() != null) {
                 try {
                     Proposal proposal = proposalRepository.getOne(HandleIIdLocation.handle(headerLocation));
-                    proposal.setAddress(address);
+                    proposal.setAddress(address); //TODO:REGULARIZAR aqui
                     logger.info("liked adress for proposal-id {}", proposal.getId());
                 } catch (Exception e) {
                     logger.info("headerLocation {}", headerLocation);
@@ -90,7 +90,7 @@ public class AddressController {
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
 
-            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/endereco/{id}").build().expand(address.getId()).toUri();
+            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/proposal/endereco/{id}").build().expand(address.getId()).toUri(); //TODO: ALTERAR URI
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(location);
             return new ResponseEntity(headers, HttpStatus.CREATED);
