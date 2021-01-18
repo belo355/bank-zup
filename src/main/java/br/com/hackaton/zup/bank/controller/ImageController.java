@@ -2,6 +2,7 @@ package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.config.files.ResponseImageHandler;
 import br.com.hackaton.zup.bank.config.files.ResponseMessageHandler;
+import br.com.hackaton.zup.bank.service.utils.HandleIIdLocation;
 import br.com.hackaton.zup.bank.model.Image;
 import br.com.hackaton.zup.bank.model.Proposal;
 import br.com.hackaton.zup.bank.repository.ProposalRepository;
@@ -47,7 +48,7 @@ public class ImageController {
         String message = "";
         try {
             Image image = imageService.handleImg(file);
-            Proposal proposal = proposalRepository.getOne(returnLong(headerLocation));//TODO: regularizar get proposal
+            Proposal proposal = proposalRepository.getOne(HandleIIdLocation.handle(headerLocation));
             proposal.setImage(image);
 
             logger.info("Image : " + image.getId() + " associeted for proposal: "  + proposal.getId());
@@ -85,7 +86,4 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 
-    public Long returnLong(String headerLocation){
-        return Long.parseLong(headerLocation.substring(headerLocation.length() - 1));
-    }
 }

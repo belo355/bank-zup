@@ -1,11 +1,13 @@
 package br.com.hackaton.zup.bank.controller.form;
 
 import br.com.hackaton.zup.bank.model.Proposal;
+import lombok.Data;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
+@Data
 public class AccountProposalForm {
 
     @NotNull @NotBlank @NotEmpty

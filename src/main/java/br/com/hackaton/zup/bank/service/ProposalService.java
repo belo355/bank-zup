@@ -27,7 +27,7 @@ public class ProposalService {
     Logger logger = LoggerFactory.getLogger(ProposalService.class);
 
     @Transactional
-    public boolean handleValidProposal(AccountProposalForm proposal){
+    public boolean validationExistisCPFandEmail(AccountProposalForm proposal){
         try {
             boolean cpf = validCpf(proposal.getCpf());
             boolean email = validEmail(proposal.getEmail());

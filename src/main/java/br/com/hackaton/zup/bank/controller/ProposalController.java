@@ -118,8 +118,7 @@ public class ProposalController {
     }
 
     public boolean handleValidProposal(AccountProposalForm proposalForm) {
-        boolean status = proposalService.handleValidProposal(proposalForm);
-        return status;
+        return proposalService.validationExistisCPFandEmail(proposalForm);
     }
 
     public boolean handleDateBirth(LocalDate birth) {

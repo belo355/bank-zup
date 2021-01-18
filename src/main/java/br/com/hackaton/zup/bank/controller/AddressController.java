@@ -2,6 +2,7 @@ package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.controller.dto.AdressAccountDto;
 import br.com.hackaton.zup.bank.controller.form.AddressProposalForm;
+import br.com.hackaton.zup.bank.service.utils.HandleIIdLocation;
 import br.com.hackaton.zup.bank.model.Address;
 import br.com.hackaton.zup.bank.model.Proposal;
 import br.com.hackaton.zup.bank.repository.AddressRepository;
@@ -19,10 +20,8 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author: Edilson Belo
@@ -59,7 +58,7 @@ public class AddressController {
 
     @GetMapping("/{id}")
     @Transactional
-    public ResponseEntity<AdressAccountDto> getAdressDetail(@PathVariable(required = true) Long id) {
+    public ResponseEntity<AdressAccountDto> getDetail(@PathVariable(required = true) Long id) {
         try {
             Optional<Address> address = addressRepository.findById(id);
             return ResponseEntity.ok(new AdressAccountDto(address.get()));
@@ -71,8 +70,8 @@ public class AddressController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> registerAdress(@RequestBody @Valid AddressProposalForm form,
-                                                 @RequestHeader(name = "x-com-location", required = true) String headerLocation) throws StringIndexOutOfBoundsException {
+    public ResponseEntity<String> register(@RequestBody @Valid AddressProposalForm form,
+                                           @RequestHeader(name = "x-com-location", required = true) String headerLocation) throws StringIndexOutOfBoundsException {
         try {
             Address address = new Address(form);
             addressRepository.save(address);
@@ -80,10 +79,11 @@ public class AddressController {
 
             if (address.getId() != null) {
                 try {
-                    Proposal proposal = proposalRepository.getOne(returnHeaderIdLocation(headerLocation));
+                    Proposal proposal = proposalRepository.getOne(HandleIIdLocation.handle(headerLocation));
                     proposal.setAddress(address);
                     logger.info("liked adress for proposal-id {}", proposal.getId());
                 } catch (Exception e) {
+                    logger.info("headerLocation {}", headerLocation);
                     return new ResponseEntity("Proposal not found", HttpStatus.BAD_REQUEST);
                 }
             } else {
@@ -100,19 +100,4 @@ public class AddressController {
             return new ResponseEntity("", HttpStatus.BAD_REQUEST);
         }
     }
-
-    public Optional<Proposal> getHeaderLocation(String headerLocation) {
-        try {
-            Optional<Proposal> proposal = proposalRepository.findById(returnHeaderIdLocation(headerLocation));
-            return proposal;
-        } catch (NullPointerException e) {
-            logger.info(e.getMessage());
-            return null;
-        }
-    }
-
-    public Long returnHeaderIdLocation(String headerLocation) {
-        return Long.parseLong(headerLocation);
-    }
-
 }
