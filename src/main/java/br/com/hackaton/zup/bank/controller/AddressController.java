@@ -23,6 +23,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.http.HttpStatus.*;
+
 /**
  * @author: Edilson Belo
  * @apiNote:
@@ -84,10 +86,10 @@ public class AddressController {
                     logger.info("liked adress for proposal-id {}", proposal.getId());
                 } catch (Exception e) {
                     logger.info("headerLocation {}", headerLocation);
-                    return new ResponseEntity("Proposal not found", HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity("Proposal not found", BAD_REQUEST);
                 }
             } else {
-                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(BAD_REQUEST);
             }
 
             URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/proposal/endereco/{id}").build().expand(address.getId()).toUri(); //TODO: ALTERAR URI
@@ -97,7 +99,7 @@ public class AddressController {
 
         } catch (EntityNotFoundException e) {
             logger.info("Not possible register adress information  " + e.getMessage());
-            return new ResponseEntity("", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("", BAD_REQUEST);
         }
     }
 }
