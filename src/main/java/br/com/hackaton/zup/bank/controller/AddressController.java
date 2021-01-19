@@ -78,7 +78,7 @@ public class AddressController {
             if (address.getId() != null) {
                 try {
                     Optional<Proposal> proposal = proposalRepository.findById(HandleIIdLocation.handle(headerLocation));
-                    proposal.ifPresent(p -> p.setAddress(address)); //TODO: REGULARIZAR DAQ
+                    proposal.ifPresent(p -> p.setAddress(address));
 //                    logger.info("liked adress for proposal-id {}", proposal.getId());
                 } catch (Exception e) {
                     logger.info("headerLocation {}", headerLocation);
