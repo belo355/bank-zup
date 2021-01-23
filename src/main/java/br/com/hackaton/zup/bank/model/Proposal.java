@@ -93,8 +93,9 @@ public class Proposal {
     }
 
     public void setAddress(Address address) {
-        this.setAddress(address);
+        this.address = address;
     }
+
     public void setImage(Image image) {
     }
 

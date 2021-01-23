@@ -72,8 +72,8 @@ public class ProposalController {
         boolean formProposalValid = handleValidProposal(form);
         boolean ageRange = handleDateBirth(form.getDateBirth());
 
-        if (formProposalValid == true) {
-            if (ageRange == true) {
+        if (formProposalValid == true) { //TODO: aplicar method template
+            if (ageRange == true) { //TODO: aplicar method template
                 try {
                     Proposal proposal = new Proposal(form);
                     proposalRepository.save(proposal);
