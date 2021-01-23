@@ -42,30 +42,6 @@ public class AddressController {
 
     Logger logger = LoggerFactory.getLogger(AddressController.class);
 
-    @GetMapping
-    @Transactional
-    public ResponseEntity<List<Address>> getAll() {
-        try {
-            List<Address> adresses = addressRepository.findAll();
-            return ResponseEntity.ok(adresses);
-        } catch (EntityNotFoundException e) {
-            logger.info(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/{id}")
-    @Transactional
-    public ResponseEntity<AdressAccountDto> getDetail(@PathVariable(required = true) Long id) {
-        try {
-            Optional<Address> address = addressRepository.findById(id);
-            return ResponseEntity.ok(new AdressAccountDto(address.get()));
-        } catch (IllegalArgumentException e) {
-            logger.info("Adress not found" + e.getMessage());
-        }
-        return ResponseEntity.notFound().build();
-    }
-
     @PostMapping
     @Transactional
     public ResponseEntity<String> register(@RequestBody @Valid AddressProposalForm form,
@@ -73,7 +49,6 @@ public class AddressController {
         try {
             Address address = new Address(form);
             addressRepository.save(address);
-            logger.info("Saved adress sucefull");
 
             if (address.getId() != null) {
                 try {
@@ -98,4 +73,30 @@ public class AddressController {
             return new ResponseEntity("", BAD_REQUEST);
         }
     }
+
+    @GetMapping
+    @Transactional
+    public ResponseEntity<List<Address>> getAll() {
+        try {
+            List<Address> adresses = addressRepository.findAll();
+            return ResponseEntity.ok(adresses);
+        } catch (EntityNotFoundException e) {
+            logger.info(e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}")
+    @Transactional
+    public ResponseEntity<AdressAccountDto> getOne(@PathVariable(required = true) Long id) {
+        try {
+            Optional<Address> address = addressRepository.findById(id);
+            return ResponseEntity.ok(new AdressAccountDto(address.get()));
+        } catch (IllegalArgumentException e) {
+            logger.info(e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 }

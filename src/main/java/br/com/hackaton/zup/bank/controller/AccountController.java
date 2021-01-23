@@ -27,12 +27,9 @@ public class AccountController {
 
     public ResponseEntity<Account> register(Account conta){
         try {
-            Account account = new Account(conta);
-            repository.save(account);
-            logger.info("conta criada {}", account.getNumber());
+            repository.save(conta);
             return new ResponseEntity(CREATED);
         }catch (IllegalArgumentException e){
-            logger.info("não foi possivel criar a conta {}", e.getMessage());
             return new ResponseEntity(BAD_REQUEST);
         }
     }
@@ -47,10 +44,8 @@ public class AccountController {
             List<Account> accounts = repository.findAll();
             return ResponseEntity.ok(accounts);
         }catch (EntityNotFoundException e){
-            logger.info("Não ha conta registradas {}", e.getMessage());
             return new ResponseEntity(BAD_REQUEST);
         }
-
     }
 
     public boolean heandleValidation(){
