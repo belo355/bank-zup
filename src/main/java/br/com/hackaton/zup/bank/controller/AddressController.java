@@ -21,6 +21,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
@@ -31,7 +32,7 @@ import static org.springframework.http.HttpStatus.*;
  */
 
 @RestController
-@RequestMapping("/proposal/endereco")
+@RequestMapping("/proposal/address")
 public class AddressController {
 
     @Autowired
@@ -49,26 +50,18 @@ public class AddressController {
         try {
             Address address = new Address(form);
             addressRepository.save(address);
-
-            if (address.getId() != null) {
-                try {
-                    Optional<Proposal> proposal = proposalRepository.findById(HandleIIdLocation.handle(headerLocation));
-                    proposal.ifPresent(p -> p.setAddress(address));
-//                    logger.info("liked adress for proposal-id {}", proposal.getId());
-                } catch (Exception e) {
-                    logger.info("headerLocation {}", headerLocation);
-                    return new ResponseEntity("Proposal not found", BAD_REQUEST);
-                }
-            } else {
-                return new ResponseEntity(BAD_REQUEST);
+            try {
+                Optional<Proposal> proposal = proposalRepository.findById(HandleIIdLocation.handle(headerLocation));
+                proposal.get().setAddress(address);
+            } catch (NoSuchElementException e) {
+                logger.info("headerLocation {}", headerLocation);
+                return new ResponseEntity("Proposal not found", BAD_REQUEST);
             }
-
             URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/proposal/endereco/{id}").build().expand(address.getId()).toUri(); //TODO: ALTERAR URI
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(location);
             return new ResponseEntity(headers, HttpStatus.CREATED);
-
-        } catch (EntityNotFoundException e) {
+        } catch (IllegalArgumentException e) {
             logger.info("Not possible register adress information  " + e.getMessage());
             return new ResponseEntity("", BAD_REQUEST);
         }
