@@ -41,6 +41,8 @@ public class AddressController {
     @Autowired
     private ProposalRepository proposalRepository;
 
+    private final String HEADER_LOCATION = "/proposal/endereco/";
+
     Logger logger = LoggerFactory.getLogger(AddressController.class);
 
     @PostMapping
@@ -50,16 +52,18 @@ public class AddressController {
         try {
             Address address = new Address(form);
             addressRepository.save(address);
-            try {
-                Optional<Proposal> proposal = proposalRepository.findById(HandleIIdLocation.handle(headerLocation));
-                proposal.get().setAddress(address);
-            } catch (NoSuchElementException e) {
-                logger.info("headerLocation {}", headerLocation);
-                return new ResponseEntity("Proposal not found", BAD_REQUEST);
-            }
-            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/proposal/endereco/{id}").build().expand(address.getId()).toUri(); //TODO: ALTERAR URI
+                try {
+                    Optional<Proposal> proposal = proposalRepository.findById(HandleIIdLocation.handle(headerLocation));
+                    proposal.get().setAddress(address);
+                } catch (NoSuchElementException e) {
+                    logger.info("headerLocation {}", headerLocation);
+                    return new ResponseEntity("Proposal not found", BAD_REQUEST);
+                }
+
+            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path(HEADER_LOCATION + "{id}").build().expand(address.getId()).toUri();
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(location);
+
             return new ResponseEntity(headers, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             logger.info("Not possible register adress information  " + e.getMessage());

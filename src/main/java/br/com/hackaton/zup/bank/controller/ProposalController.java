@@ -20,7 +20,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,8 +30,6 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @RequestMapping("/proposal")
 public class ProposalController {
 
-    private static final int AGE_BIRTH = 18;
-
     @Autowired
     private ProposalRepository proposalRepository;
 
@@ -40,6 +37,31 @@ public class ProposalController {
     private ProposalService proposalService;
 
     Logger logger = LoggerFactory.getLogger(ProposalController.class);
+
+    @PostMapping
+    @Transactional
+    public ResponseEntity<String> register(@RequestBody @Valid AccountProposalForm form) {
+
+        try{
+            boolean isFormProposalValid = proposalService.handleValidationFormProposal(form);
+
+            Proposal proposal = new Proposal(form);
+            proposalRepository.save(proposal);
+
+            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/proposal/{id}").build()
+                    .expand(proposal.getId()).toUri();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(location);
+            logger.info(("Proposal registed sucessfull:" + proposal.getId() + " generate location: " + headers));
+
+                return new ResponseEntity(headers, HttpStatus.CREATED);
+            } catch (EntityNotFoundException e) {
+                logger.info(e.getMessage());
+                return new ResponseEntity("Erro register proposal", BAD_REQUEST);
+            }
+
+    }
 
     @GetMapping
     @Transactional
@@ -65,53 +87,5 @@ public class ProposalController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
-    @Transactional
-    public ResponseEntity<String> register(@RequestBody @Valid AccountProposalForm form) {
-
-        boolean formProposalValid = handleValidProposal(form);
-        boolean ageRange = handleDateBirth(form.getDateBirth());
-
-        if (formProposalValid == true) { //TODO: aplicar method template
-            if (ageRange == true) { //TODO: aplicar method template
-                try {
-                    Proposal proposal = new Proposal(form);
-                    proposalRepository.save(proposal);
-
-                    URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/proposal/{id}").build()
-                            .expand(proposal.getId()).toUri();
-
-                    HttpHeaders headers = new HttpHeaders();
-                    headers.setLocation(location);
-                    logger.info(("Proposal registed sucessfull:" + proposal.getId() + " generate location: " + headers));
-
-                    return new ResponseEntity(headers, HttpStatus.CREATED);
-                } catch (EntityNotFoundException e) {
-                    logger.info(e.getMessage());
-                    return new ResponseEntity("Erro register proposal", BAD_REQUEST);
-                }
-            } else {
-                return new ResponseEntity("Proposal invalid, date birth < 18 years", BAD_REQUEST);
-            }
-        } else {
-            return new ResponseEntity("Proposal invalid,  CPF or EMAIL exists", BAD_REQUEST);
-        }
-    }
-
-    public boolean handleValidProposal(AccountProposalForm proposalForm) {
-        return proposalService.validationExistisCPFandEmail(proposalForm);
-    }
-
-    public boolean handleDateBirth(LocalDate birth) {
-        int ageYearBirth = birth.getYear();
-        int yearActual = LocalDate.now().getYear();
-
-        int ageFinal = yearActual - ageYearBirth;
-        if (ageFinal >= AGE_BIRTH) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
 }

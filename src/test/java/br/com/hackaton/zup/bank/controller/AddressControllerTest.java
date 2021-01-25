@@ -61,7 +61,6 @@ public class AddressControllerTest {
 
     @Test
     public void get201ForRegisterAddress() throws Exception {
-        //TODO: entender pq este teste nao executa com os demais
         URI uriProposal = new URI("/abertura-conta");
         String jsonRequestProposal = "{\"cpf\": \"42036080820\", \"dateBirth\":\"2000-02-20\", \"email\":\"email@contato.com\",\"lastName\":\"Silva\",\"name\":\"Maria\"}";
 
