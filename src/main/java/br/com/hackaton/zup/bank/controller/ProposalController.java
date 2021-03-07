@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import br.com.hackaton.zup.bank.controller.form.AccountProposalForm;
 import br.com.hackaton.zup.bank.model.Proposal;
 import br.com.hackaton.zup.bank.repository.ProposalRepository;
-import org.slf4j.Logge
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
