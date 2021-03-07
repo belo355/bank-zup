@@ -17,7 +17,7 @@ import java.util.Optional;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
-@RequestMapping("/conta")
+@RequestMapping("/account")
 public class AccountController {
 
     @Autowired
@@ -25,12 +25,12 @@ public class AccountController {
 
     Logger logger = LoggerFactory.getLogger(AccountController.class);
 
-    public ResponseEntity<Account> register(Account conta){
+    public ResponseEntity<?> register(Account conta){
         try {
             repository.save(conta);
-            return new ResponseEntity(CREATED);
+            return new ResponseEntity<>(CREATED);
         }catch (IllegalArgumentException e){
-            return new ResponseEntity(BAD_REQUEST);
+            return new ResponseEntity<>(BAD_REQUEST);
         }
     }
 

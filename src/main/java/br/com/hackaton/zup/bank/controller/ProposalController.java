@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import br.com.hackaton.zup.bank.controller.form.AccountProposalForm;
 import br.com.hackaton.zup.bank.model.Proposal;
 import br.com.hackaton.zup.bank.repository.ProposalRepository;
-import org.slf4j.Logger;
+import org.slf4j.Logge
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -43,7 +43,6 @@ public class ProposalController {
     public ResponseEntity<String> register(@RequestBody @Valid AccountProposalForm form) {
 
         try{
-            boolean isFormProposalValid = proposalService.handleValidationFormProposal(form);
 
             Proposal proposal = new Proposal(form);
             proposalRepository.save(proposal);
@@ -55,10 +54,10 @@ public class ProposalController {
             headers.setLocation(location);
             logger.info(("Proposal registed sucessfull:" + proposal.getId() + " generate location: " + headers));
 
-                return new ResponseEntity(headers, HttpStatus.CREATED);
+                return new ResponseEntity<>(headers, HttpStatus.CREATED);
             } catch (EntityNotFoundException e) {
                 logger.info(e.getMessage());
-                return new ResponseEntity("Erro register proposal", BAD_REQUEST);
+                return new ResponseEntity<>("Erro register proposal", BAD_REQUEST);
             }
 
     }
@@ -82,7 +81,7 @@ public class ProposalController {
             Optional<Proposal> proposal = proposalRepository.findById(id);
             return ResponseEntity.ok(new ProposalAccountDto(proposal.get()));
         } catch (Exception e) {
-            logger.info("Proposal not found: " + e.getMessage());
+            logger.warn("Proposal not found: " , e.getMessage());
         }
         return ResponseEntity.notFound().build();
     }

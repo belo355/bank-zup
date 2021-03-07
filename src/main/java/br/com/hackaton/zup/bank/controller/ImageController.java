@@ -53,7 +53,7 @@ public class ImageController {
             Proposal proposal = proposalRepository.getOne(HandleIIdLocation.handle(headerLocation));
             proposal.setImage(image);
 
-            logger.info("Image : " + image.getId() + " associeted for proposal: "  + proposal.getId());
+            logger.info("Image : " + image.getId() + " associeted for proposal: " + proposal.getId());
 
             URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/upload/{id}").build()
                     .expand(image.getId()).toUri();

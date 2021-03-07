@@ -32,7 +32,7 @@ import static org.springframework.http.HttpStatus.*;
  */
 
 @RestController
-@RequestMapping("/proposal/address")
+@RequestMapping("/address")
 public class AddressController {
 
     @Autowired
@@ -41,7 +41,7 @@ public class AddressController {
     @Autowired
     private ProposalRepository proposalRepository;
 
-    private final String HEADER_LOCATION = "/proposal/endereco/";
+    private final String HEADER_LOCATION = "/endereco";
 
     Logger logger = LoggerFactory.getLogger(AddressController.class);
 
