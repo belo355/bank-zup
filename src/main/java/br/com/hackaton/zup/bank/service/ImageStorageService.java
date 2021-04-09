@@ -10,15 +10,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.stream.Stream;
-
-/**
- *
- * @author: Edilson Belo
- * @apiNote:
- *
- */
 
 @Service
 public class ImageStorageService {
@@ -28,20 +20,21 @@ public class ImageStorageService {
 
     Logger logger = LoggerFactory.getLogger(ImageStorageService.class);
 
-    public Image handleImg(MultipartFile file) throws IOException {
-        try{
-            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-            Image img = new Image(fileName, file.getContentType(), file.getBytes());
-            imageRepository.save(img);
-            return img;
-        }catch (IOException e){
-            logger.info(e.getMessage());
+    public Image handleImg(MultipartFile file) {
+        String multipartFile = file.getOriginalFilename();
+        if (multipartFile != null) {
+            try {
+                String fileName = StringUtils.cleanPath(multipartFile);
+                Image img = new Image(fileName, file.getContentType(), file.getBytes());
+                imageRepository.save(img);
+                return img;
+            } catch (IOException e) {
+                logger.info(e.getMessage());
+                return null;
+            }
+        } else {
             return null;
         }
-    }
-
-    public Optional<Image> getFile(Long id) {
-        return imageRepository.findById(id);
     }
 
     public Stream<Image> getAllFiles() {

@@ -23,15 +23,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static sun.security.timestamp.TSResponse.BAD_REQUEST;
-
-/**
- *
- * @author:
- * @apiNote:
- *
- */
-
 @RestController
 @RequestMapping("/abertura-conta/upload")
 public class ImageController {
@@ -53,10 +44,10 @@ public class ImageController {
             Proposal proposal = proposalRepository.getOne(HandleIIdLocation.handle(headerLocation));
             proposal.setImage(image);
 
-            logger.info("Image : " + image.getId() + " associeted for proposal: " + proposal.getId());
+            logger.info("Image apply: " + image.getId());
 
-            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/upload/{id}").build()
-                    .expand(image.getId()).toUri();
+            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping()
+                    .path("/abertura-conta/upload/{id}").build().expand(image.getId()).toUri();
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(location);
@@ -65,7 +56,7 @@ public class ImageController {
         } catch (EntityNotFoundException | IOException e) {
             logger.info(e.getMessage());
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(BAD_REQUEST).body(new ResponseMessageHandler(message));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessageHandler(message));
         }
     }
 
@@ -87,5 +78,4 @@ public class ImageController {
 
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
-
 }

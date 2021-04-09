@@ -25,9 +25,9 @@ public class AccountController {
 
     Logger logger = LoggerFactory.getLogger(AccountController.class);
 
-    public ResponseEntity<?> register(Account conta){
+    public ResponseEntity<AccountDTO> register(Account account){
         try {
-            repository.save(conta);
+            repository.save(account);
             return new ResponseEntity<>(CREATED);
         }catch (IllegalArgumentException e){
             return new ResponseEntity<>(BAD_REQUEST);
@@ -36,7 +36,7 @@ public class AccountController {
 
     public ResponseEntity<AccountDTO> getOne(Long id){
         Optional<Account> account = repository.findById(id);
-        return ResponseEntity.ok(new AccountDTO(account.get()));
+        return account.map(value -> ResponseEntity.ok(new AccountDTO(value))).orElse(null);
     }
 
     public ResponseEntity<List<Account>> getAll(){
@@ -46,10 +46,5 @@ public class AccountController {
         }catch (EntityNotFoundException e){
             return new ResponseEntity(BAD_REQUEST);
         }
-    }
-
-    public boolean heandleValidation(){
-        return false;
-        //TODO: criar metodo validador
     }
 }

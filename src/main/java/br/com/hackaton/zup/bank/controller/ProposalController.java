@@ -52,7 +52,7 @@ public class ProposalController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(location);
-            logger.info(("Proposal registed sucessfull:" + proposal.getId() + " generate location: " + headers));
+            logger.info(("Proposal registed sucessfull:" + proposal.getId()));
 
                 return new ResponseEntity<>(headers, HttpStatus.CREATED);
             } catch (EntityNotFoundException e) {
@@ -79,9 +79,9 @@ public class ProposalController {
     public ResponseEntity<ProposalAccountDto> getOne(@PathVariable(required = true) Long id) {
         try {
             Optional<Proposal> proposal = proposalRepository.findById(id);
-            return ResponseEntity.ok(new ProposalAccountDto(proposal.get()));
+            return proposal.map(prop -> ResponseEntity.ok(new ProposalAccountDto(prop))).orElse(null);
         } catch (Exception e) {
-            logger.warn("Proposal not found: " , e.getMessage());
+            logger.warn(e.getMessage());
         }
         return ResponseEntity.notFound().build();
     }
