@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.EntityNotFoundException;
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,13 +26,16 @@ import java.util.stream.Collectors;
 @RequestMapping("/abertura-conta/upload")
 public class ImageController {
 
-    @Autowired
     private ImageStorageService imageService;
-
-    @Autowired
     private ProposalRepository proposalRepository;
 
     Logger logger = LoggerFactory.getLogger(ImageController.class);
+
+    @Autowired
+    public ImageController(ImageStorageService imageService, ProposalRepository proposalRepository) {
+        this.imageService = imageService;
+        this.proposalRepository = proposalRepository;
+    }
 
     @PostMapping
     public ResponseEntity<ResponseMessageHandler> uploadFile(@RequestParam(value = "file", required = true) MultipartFile file,
@@ -53,7 +55,7 @@ public class ImageController {
             headers.setLocation(location);
 
             return new ResponseEntity(headers, HttpStatus.CREATED);
-        } catch (EntityNotFoundException | IOException e) {
+        } catch (EntityNotFoundException e) {
             logger.info(e.getMessage());
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessageHandler(message));

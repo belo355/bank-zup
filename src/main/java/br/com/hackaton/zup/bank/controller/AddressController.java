@@ -26,24 +26,22 @@ import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
 
-/**
- * @author: Edilson Belo
- * @apiNote:
- */
-
 @RestController
 @RequestMapping("/address")
 public class AddressController {
 
-    @Autowired
     private AddressRepository addressRepository;
-
-    @Autowired
     private ProposalRepository proposalRepository;
 
     private final String HEADER_LOCATION = "/endereco";
 
     Logger logger = LoggerFactory.getLogger(AddressController.class);
+
+    @Autowired
+    public AddressController(AddressRepository addressRepository, ProposalRepository proposalRepository) {
+        this.addressRepository = addressRepository;
+        this.proposalRepository = proposalRepository;
+    }
 
     @PostMapping
     @Transactional

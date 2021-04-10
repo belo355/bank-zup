@@ -3,8 +3,6 @@ package br.com.hackaton.zup.bank.controller;
 import br.com.hackaton.zup.bank.controller.dto.AccountDTO;
 import br.com.hackaton.zup.bank.model.Account;
 import br.com.hackaton.zup.bank.repository.AccountRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +18,12 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("/account")
 public class AccountController {
 
-    @Autowired
     private AccountRepository repository;
 
-    Logger logger = LoggerFactory.getLogger(AccountController.class);
+    @Autowired
+    public AccountController(AccountRepository repository) {
+        this.repository = repository;
+    }
 
     public ResponseEntity<AccountDTO> register(Account account){
         try {
