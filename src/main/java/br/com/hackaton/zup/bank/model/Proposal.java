@@ -1,5 +1,6 @@
 package br.com.hackaton.zup.bank.model;
 
+import br.com.hackaton.zup.bank.controller.dto.ProposalDTO;
 import br.com.hackaton.zup.bank.controller.form.AccountProposalForm;
 import org.springframework.format.annotation.DateTimeFormat;
 

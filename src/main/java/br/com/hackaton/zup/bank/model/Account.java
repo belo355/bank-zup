@@ -1,7 +1,5 @@
 package br.com.hackaton.zup.bank.model;
 
-import br.com.hackaton.zup.bank.controller.dto.AccountDTO;
-
 import javax.persistence.*;
 
 @Table(name="Acount")
@@ -10,18 +8,18 @@ public class Account {
 
     public Account(){}
 
-    public Account(String number, double saldo){
+    public Account(String agencia, String number, double saldo){
+        this.agencia = agencia;
         this.number = number;
         this.saldo = saldo;
     }
 
-    public Account(AccountDTO conta){
-        this.number = conta.getNumber();
-        this.saldo = conta.getValor();
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name="agencia")
+    private String agencia;
 
     @Column(name="number")
     private String number;
@@ -29,12 +27,27 @@ public class Account {
     @Column(name="saldo")
     private double saldo;
 
+
+    public String getAgencia() {
+        return agencia;
+    }
     public String getNumber() {
         return number;
     }
 
     public double getSaldo() {
         return saldo;
+    }
+
+    public void setAgencia(String agencia) {
+        this.agencia = agencia;
+    }
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
     }
 
     @Override
