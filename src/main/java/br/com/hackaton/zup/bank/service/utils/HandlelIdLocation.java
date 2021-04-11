@@ -1,8 +1,8 @@
 package br.com.hackaton.zup.bank.service.utils;
 
-public class HandleIIdLocation {
+public class HandlelIdLocation {
 
-    private HandleIIdLocation(){}
+    private HandlelIdLocation(){}
 
     public static Long handle(String headerLocation){
         String header = headerLocation.replace("http://localhost:8080/proposal/", "");

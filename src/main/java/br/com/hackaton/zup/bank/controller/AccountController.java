@@ -5,8 +5,7 @@ import br.com.hackaton.zup.bank.model.Account;
 import br.com.hackaton.zup.bank.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -25,25 +24,29 @@ public class AccountController {
         this.repository = repository;
     }
 
-    public ResponseEntity<AccountDTO> register(Account account){
+    @PostMapping()
+    public ResponseEntity<AccountDTO> register(@RequestBody AccountDTO newAccount) {
+        Account newAccountClient = new Account(newAccount);
         try {
-            repository.save(account);
+            repository.save(newAccountClient);
             return new ResponseEntity<>(CREATED);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(BAD_REQUEST);
         }
     }
 
-    public ResponseEntity<AccountDTO> getOne(Long id){
+    @GetMapping("/{id}")
+    public ResponseEntity<AccountDTO> getOne(@RequestParam Long id) {
         Optional<Account> account = repository.findById(id);
         return account.map(value -> ResponseEntity.ok(new AccountDTO(value))).orElse(null);
     }
 
-    public ResponseEntity<List<Account>> getAll(){
-        try{
+    @GetMapping("/")
+    public ResponseEntity<List<Account>> getAll() {
+        try {
             List<Account> accounts = repository.findAll();
             return ResponseEntity.ok(accounts);
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return new ResponseEntity(BAD_REQUEST);
         }
     }

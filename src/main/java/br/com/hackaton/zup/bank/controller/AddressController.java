@@ -2,7 +2,7 @@ package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.controller.dto.AdressAccountDto;
 import br.com.hackaton.zup.bank.controller.form.AddressProposalForm;
-import br.com.hackaton.zup.bank.service.utils.HandleIIdLocation;
+import br.com.hackaton.zup.bank.service.utils.HandlelIdLocation;
 import br.com.hackaton.zup.bank.model.Address;
 import br.com.hackaton.zup.bank.model.Proposal;
 import br.com.hackaton.zup.bank.repository.AddressRepository;
@@ -27,7 +27,7 @@ import java.util.Optional;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
-@RequestMapping("/address")
+@RequestMapping("/proposal/address")
 public class AddressController {
 
     private AddressRepository addressRepository;
@@ -51,7 +51,7 @@ public class AddressController {
             Address address = new Address(form);
             addressRepository.save(address);
                 try {
-                    Optional<Proposal> proposal = proposalRepository.findById(HandleIIdLocation.handle(headerLocation));
+                    Optional<Proposal> proposal = proposalRepository.findById(HandlelIdLocation.handle(headerLocation));
                     proposal.get().setAddress(address);
                 } catch (NoSuchElementException e) {
                     logger.info("headerLocation {}", headerLocation);

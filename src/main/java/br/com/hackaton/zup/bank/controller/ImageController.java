@@ -2,7 +2,7 @@ package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.config.files.ResponseImageHandler;
 import br.com.hackaton.zup.bank.config.files.ResponseMessageHandler;
-import br.com.hackaton.zup.bank.service.utils.HandleIIdLocation;
+import br.com.hackaton.zup.bank.service.utils.HandlelIdLocation;
 import br.com.hackaton.zup.bank.model.Image;
 import br.com.hackaton.zup.bank.model.Proposal;
 import br.com.hackaton.zup.bank.repository.ProposalRepository;
@@ -20,10 +20,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.persistence.EntityNotFoundException;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/abertura-conta/upload")
+@RequestMapping("/proposal/upload/image")
 public class ImageController {
 
     private ImageStorageService imageService;
@@ -43,8 +45,9 @@ public class ImageController {
         String message = "";
         try {
             Image image = imageService.handleImg(file);
-            Proposal proposal = proposalRepository.getOne(HandleIIdLocation.handle(headerLocation));
-            proposal.setImage(image);
+
+            Optional<Proposal> proposal = proposalRepository.findById(HandlelIdLocation.handle(headerLocation));
+            proposal.ifPresent(p -> p.setImage(image));
 
             logger.info("Image apply: " + image.getId());
 
