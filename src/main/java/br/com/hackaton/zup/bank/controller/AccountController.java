@@ -1,8 +1,12 @@
 package br.com.hackaton.zup.bank.controller;
 
-import br.com.hackaton.zup.bank.controller.dto.AccountDTO;
 import br.com.hackaton.zup.bank.model.Account;
+import br.com.hackaton.zup.bank.model.Proposal;
 import br.com.hackaton.zup.bank.repository.AccountRepository;
+import br.com.hackaton.zup.bank.repository.ProposalRepository;
+import br.com.hackaton.zup.bank.service.utils.HandlelIdLocation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,34 +21,42 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("/account")
 public class AccountController {
 
-    private AccountRepository repository;
+    private AccountRepository accountRepository;
+    private ProposalRepository proposalRepository;
+
+    Logger logger = LoggerFactory.getLogger(AccountController.class);
 
     @Autowired
-    public AccountController(AccountRepository repository) {
-        this.repository = repository;
+    public AccountController(AccountRepository accountRepository, ProposalRepository proposalRepository) {
+        this.accountRepository = accountRepository;
+        this.proposalRepository = proposalRepository;
     }
 
     @PostMapping()
-    public ResponseEntity<AccountDTO> register(@RequestBody AccountDTO newAccount) {
-        Account newAccountClient = new Account(newAccount);
-        try {
-            repository.save(newAccountClient);
+    public ResponseEntity<Account> register(@RequestHeader(name = "x-com-location", required = true) String headerLocation) {
+
+        try{
+            Proposal newProposal = proposalRepository.getOne(HandlelIdLocation.handle(headerLocation));
+            Account newAccount = new Account();
+
+            if (newProposal.getCpf() != null) {
+                newAccount.setAgencia("0001");
+                newAccount.setNumber("01035123");
+                newAccount.setSaldo(0);
+            }
+            accountRepository.save(newAccount);
             return new ResponseEntity<>(CREATED);
-        } catch (IllegalArgumentException e) {
+
+        }catch (EntityNotFoundException | IllegalArgumentException e){
+            logger.error("erro register proposal" + e.getMessage());
             return new ResponseEntity<>(BAD_REQUEST);
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AccountDTO> getOne(@RequestParam Long id) {
-        Optional<Account> account = repository.findById(id);
-        return account.map(value -> ResponseEntity.ok(new AccountDTO(value))).orElse(null);
-    }
-
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<Account>> getAll() {
         try {
-            List<Account> accounts = repository.findAll();
+            List<Account> accounts = accountRepository.findAll();
             return ResponseEntity.ok(accounts);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity(BAD_REQUEST);
