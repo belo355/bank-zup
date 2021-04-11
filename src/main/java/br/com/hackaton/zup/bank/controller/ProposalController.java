@@ -1,7 +1,6 @@
 package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.controller.dto.ProposalAccountDto;
-import br.com.hackaton.zup.bank.service.ProposalService;
 import lombok.extern.slf4j.Slf4j;
 
 import br.com.hackaton.zup.bank.controller.form.AccountProposalForm;
@@ -30,35 +29,35 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @RequestMapping("/proposal")
 public class ProposalController {
 
-    @Autowired
     private ProposalRepository proposalRepository;
 
-    @Autowired
-    private ProposalService proposalService;
-
     Logger logger = LoggerFactory.getLogger(ProposalController.class);
+
+    @Autowired
+    public ProposalController(ProposalRepository proposalRepository) {
+        this.proposalRepository = proposalRepository;
+    }
 
     @PostMapping
     @Transactional
     public ResponseEntity<String> register(@RequestBody @Valid AccountProposalForm form) {
 
-        try{
+        try {
 
             Proposal proposal = new Proposal(form);
             proposalRepository.save(proposal);
 
-            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/proposal/{id}").build()
-                    .expand(proposal.getId()).toUri();
+            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/proposal/{id}").build().expand(proposal.getId()).toUri();
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(location);
-            logger.info(("Proposal registed sucessfull:" + proposal.getId() + " generate location: " + headers));
+            logger.info(("Proposal registed sucessfull:" + proposal.getId()));
 
-                return new ResponseEntity<>(headers, HttpStatus.CREATED);
-            } catch (EntityNotFoundException e) {
-                logger.info(e.getMessage());
-                return new ResponseEntity<>("Erro register proposal", BAD_REQUEST);
-            }
+            return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        } catch (EntityNotFoundException e) {
+            logger.info(e.getMessage());
+            return new ResponseEntity<>("Erro register proposal", BAD_REQUEST);
+        }
 
     }
 
@@ -79,9 +78,9 @@ public class ProposalController {
     public ResponseEntity<ProposalAccountDto> getOne(@PathVariable(required = true) Long id) {
         try {
             Optional<Proposal> proposal = proposalRepository.findById(id);
-            return ResponseEntity.ok(new ProposalAccountDto(proposal.get()));
+            return proposal.map(prop -> ResponseEntity.ok(new ProposalAccountDto(prop))).orElse(null);
         } catch (Exception e) {
-            logger.warn("Proposal not found: " , e.getMessage());
+            logger.warn(e.getMessage());
         }
         return ResponseEntity.notFound().build();
     }

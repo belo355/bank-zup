@@ -1,8 +1,10 @@
 package br.com.hackaton.zup.bank.model;
 
+import br.com.hackaton.zup.bank.controller.dto.AccountDTO;
+
 import javax.persistence.*;
 
-@Table(name="Count")
+@Table(name="Acount")
 @Entity
 public class Account {
 
@@ -13,11 +15,10 @@ public class Account {
         this.saldo = saldo;
     }
 
-    public Account(Account conta){
-        this.number = conta.number;
-        this.saldo = conta.saldo;
+    public Account(AccountDTO conta){
+        this.number = conta.getNumber();
+        this.saldo = conta.getValor();
     }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

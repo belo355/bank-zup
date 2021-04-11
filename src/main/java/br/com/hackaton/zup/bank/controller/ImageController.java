@@ -2,7 +2,7 @@ package br.com.hackaton.zup.bank.controller;
 
 import br.com.hackaton.zup.bank.config.files.ResponseImageHandler;
 import br.com.hackaton.zup.bank.config.files.ResponseMessageHandler;
-import br.com.hackaton.zup.bank.service.utils.HandleIIdLocation;
+import br.com.hackaton.zup.bank.service.utils.HandlelIdLocation;
 import br.com.hackaton.zup.bank.model.Image;
 import br.com.hackaton.zup.bank.model.Proposal;
 import br.com.hackaton.zup.bank.repository.ProposalRepository;
@@ -18,31 +18,26 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.EntityNotFoundException;
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
-import static sun.security.timestamp.TSResponse.BAD_REQUEST;
-
-/**
- *
- * @author:
- * @apiNote:
- *
- */
-
 @RestController
-@RequestMapping("/abertura-conta/upload")
+@RequestMapping("/proposal/upload/image")
 public class ImageController {
 
-    @Autowired
     private ImageStorageService imageService;
-
-    @Autowired
     private ProposalRepository proposalRepository;
 
     Logger logger = LoggerFactory.getLogger(ImageController.class);
+
+    @Autowired
+    public ImageController(ImageStorageService imageService, ProposalRepository proposalRepository) {
+        this.imageService = imageService;
+        this.proposalRepository = proposalRepository;
+    }
 
     @PostMapping
     public ResponseEntity<ResponseMessageHandler> uploadFile(@RequestParam(value = "file", required = true) MultipartFile file,
@@ -50,22 +45,23 @@ public class ImageController {
         String message = "";
         try {
             Image image = imageService.handleImg(file);
-            Proposal proposal = proposalRepository.getOne(HandleIIdLocation.handle(headerLocation));
-            proposal.setImage(image);
 
-            logger.info("Image : " + image.getId() + " associeted for proposal: " + proposal.getId());
+            Optional<Proposal> proposal = proposalRepository.findById(HandlelIdLocation.handle(headerLocation));
+            proposal.ifPresent(p -> p.setImage(image));
 
-            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/abertura-conta/upload/{id}").build()
-                    .expand(image.getId()).toUri();
+            logger.info("Image apply: " + image.getId());
+
+            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping()
+                    .path("/abertura-conta/upload/{id}").build().expand(image.getId()).toUri();
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(location);
 
             return new ResponseEntity(headers, HttpStatus.CREATED);
-        } catch (EntityNotFoundException | IOException e) {
+        } catch (EntityNotFoundException e) {
             logger.info(e.getMessage());
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(BAD_REQUEST).body(new ResponseMessageHandler(message));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessageHandler(message));
         }
     }
 
@@ -87,5 +83,4 @@ public class ImageController {
 
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
-
 }
