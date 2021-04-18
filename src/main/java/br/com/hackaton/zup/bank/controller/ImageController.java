@@ -56,7 +56,7 @@ public class ImageController {
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(location);
 
-            return new ResponseEntity(headers, HttpStatus.CREATED);
+            return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (EntityNotFoundException e) {
             logger.info(e.getMessage());
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";

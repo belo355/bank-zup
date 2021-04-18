@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -54,12 +53,12 @@ public class AccountController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Account>> getAll() {
+    public ResponseEntity getAll() {
         try {
             List<Account> accounts = accountRepository.findAll();
             return ResponseEntity.ok(accounts);
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity(BAD_REQUEST);
+            return new ResponseEntity<>(BAD_REQUEST);
         }
     }
 }
