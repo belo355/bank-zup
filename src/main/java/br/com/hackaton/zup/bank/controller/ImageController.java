@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/proposal/upload/image")
 public class ImageController {
 
+    public static final String URL_IMAGE = "/proposal/upload/";
+
     private ImageStorageService imageService;
     private ProposalRepository proposalRepository;
 
@@ -43,7 +45,7 @@ public class ImageController {
                                                              @RequestHeader(name = "x-com-location", required = true) String headerLocation) {
         String message = "";
         try {
-            Image image = imageService.handleImg(file);
+            Image image = imageService.insertImage(file);
 
             Optional<Proposal> proposal = proposalRepository.findById(HandlelIdLocation.handle(headerLocation));
             proposal.ifPresent(p -> p.setImage(image));
@@ -51,12 +53,12 @@ public class ImageController {
             logger.info("Image apply: " + image.getId());
 
             URI location = ServletUriComponentsBuilder.fromCurrentServletMapping()
-                    .path("/abertura-conta/upload/{id}").build().expand(image.getId()).toUri();
+                    .path(URL_IMAGE+ "{id}").build().expand(image.getId()).toUri();
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(location);
 
-            return new ResponseEntity(headers, HttpStatus.CREATED);
+            return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (EntityNotFoundException e) {
             logger.info(e.getMessage());
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
@@ -69,7 +71,7 @@ public class ImageController {
         List<ResponseImageHandler> files = imageService.getAllFiles().map(dbFile -> {
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
-                    .path("/abertura-conta/upload/")
+                    .path(URL_IMAGE)
                     .path(dbFile.getId().toString())
                     .toUriString();
 

@@ -33,7 +33,7 @@ public class AddressController {
     private AddressRepository addressRepository;
     private ProposalRepository proposalRepository;
 
-    private final String HEADER_LOCATION = "/endereco";
+    private static final String HEADER_LOCATION = "/endereco";
 
     Logger logger = LoggerFactory.getLogger(AddressController.class);
 
@@ -46,26 +46,28 @@ public class AddressController {
     @PostMapping
     @Transactional
     public ResponseEntity<String> register(@RequestBody @Valid AddressProposalForm form,
-                                           @RequestHeader(name = "x-com-location", required = true) String headerLocation) throws StringIndexOutOfBoundsException {
+                                           @RequestHeader(name = "x-com-location", required = true) String headerLocation) {
         try {
-            Address address = new Address(form);
-            addressRepository.save(address);
-                try {
-                    Optional<Proposal> proposal = proposalRepository.findById(HandlelIdLocation.handle(headerLocation));
-                    proposal.get().setAddress(address);
-                } catch (NoSuchElementException e) {
-                    logger.info("headerLocation {}", headerLocation);
-                    return new ResponseEntity("Proposal not found", BAD_REQUEST);
-                }
 
-            URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path(HEADER_LOCATION + "{id}").build().expand(address.getId()).toUri();
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(location);
+            Optional<Proposal> proposal = proposalRepository.findById(HandlelIdLocation.handle(headerLocation));
 
-            return new ResponseEntity(headers, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            logger.info("Not possible register adress information  " + e.getMessage());
-            return new ResponseEntity("", BAD_REQUEST);
+            if (proposal.isPresent() && proposal.get().getAddress() == null) {
+
+                Address address = new Address(form);
+                addressRepository.save(address);
+
+                proposal.ifPresent(value -> value.setAddress(address));
+
+                URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path(HEADER_LOCATION + "{id}").build().expand(address.getId()).toUri();
+                HttpHeaders headers = new HttpHeaders();
+                headers.setLocation(location);
+                return new ResponseEntity<>(headers, HttpStatus.CREATED);
+
+            }else{
+                return new ResponseEntity<>("Not possible register adress information, address exists", BAD_REQUEST);
+            }
+        } catch (IllegalArgumentException | NoSuchElementException e) {
+            return new ResponseEntity<>("Proposal not found", BAD_REQUEST);
         }
     }
 
@@ -73,8 +75,8 @@ public class AddressController {
     @Transactional
     public ResponseEntity<List<Address>> getAll() {
         try {
-            List<Address> adresses = addressRepository.findAll();
-            return ResponseEntity.ok(adresses);
+            List<Address> addresses = addressRepository.findAll();
+            return ResponseEntity.ok(addresses);
         } catch (EntityNotFoundException e) {
             logger.info(e.getMessage());
             return ResponseEntity.notFound().build();
@@ -86,11 +88,14 @@ public class AddressController {
     public ResponseEntity<AdressAccountDto> getOne(@PathVariable(required = true) Long id) {
         try {
             Optional<Address> address = addressRepository.findById(id);
+            if(address.isPresent()){
             return ResponseEntity.ok(new AdressAccountDto(address.get()));
+            }
         } catch (IllegalArgumentException e) {
             logger.info(e.getMessage());
             return ResponseEntity.notFound().build();
         }
+        return null;
     }
 
 

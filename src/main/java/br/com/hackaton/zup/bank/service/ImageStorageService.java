@@ -20,7 +20,7 @@ public class ImageStorageService {
 
     Logger logger = LoggerFactory.getLogger(ImageStorageService.class);
 
-    public Image handleImg(MultipartFile file) {
+    public Image insertImage(MultipartFile file) {
         String multipartFile = file.getOriginalFilename();
         if (multipartFile != null) {
             try {

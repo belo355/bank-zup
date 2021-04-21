@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -32,7 +31,7 @@ public class ProposalControllerTest {
     @Test
     public void registerNewProposal() throws Exception {
 
-        URI uri = new URI("/abertura-conta");
+        URI uri = new URI("/proposal");
         String jsonRequest = "{\"cpf\": \"42036080820\", \"dateBirth\":\"2000-02-20\", \"email\":\"email@contato.com\",\"lastName\":\"Silva\",\"name\":\"Maria\"}";
 
         mock.perform(MockMvcRequestBuilders
@@ -47,7 +46,7 @@ public class ProposalControllerTest {
     @Test
     public void getAllListProposal() throws Exception {
 
-        URI uri = new URI("/abertura-conta");
+        URI uri = new URI("/proposal");
         String jsonRequest = "{\"cpf\": \"42036080820\", \"dateBirth\":\"2000-02-20\", \"email\":\"email@contato.com\",\"lastName\":\"Silva\",\"name\":\"Maria\"}";
 
         mock.perform(MockMvcRequestBuilders
@@ -61,7 +60,7 @@ public class ProposalControllerTest {
 
     @Test
     public void notRegisterNewProposalAndReturn400() throws Exception {
-        URI uri = new URI("/abertura-conta");
+        URI uri = new URI("/proposal");
         String jsonRequest = "{\"cpf\": \"00\", \"dateBirth\":\"2000-02-20\", \"email\":\"email@contato.com\",\"lastName\":\"Silva\",\"name\":\"Maria\"}";
 
 
